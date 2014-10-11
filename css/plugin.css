@@ -1,0 +1,26 @@
+.table thead th {
+    font-weight: bold;
+}
+
+.table tbody th {
+    text-align: right;
+}
+
+table.table tbody > tr:nth-child(odd) > th {
+    background-color: #CCC;
+}
+
+/*somehow unused*/
+table.table tbody > tr:nth-child(even) > th {
+    background-color: #FFF;
+}
+
+
+table.table tbody tr td:hover {
+    background-color: #AAA;
+}
+
+a.btn:link, a.btn:visited {
+    font-weight: bold;
+    color: white;
+}
