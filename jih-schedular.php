@@ -33,6 +33,12 @@ function AutoLoadJihSchedularFiles( $class ) {
     }
 }
 
+$twigHelper = JihTwig::getInstance();
+$twigHelper->loadTemplate();
+$twigHelper->addTemplateData('yolo','it aint working!');
+
+$twig = $twigHelper->twig;
+
 
 //CONTROLLER LOGIC
 $controller = new JihSchedularController();

@@ -15,6 +15,8 @@ class JihSchedularController {
         $helper = JihViewHelper::getInstance();
         $helper->AddCss('plugin');
         $helper->AddCss('bootstrap');
+        $helper->AddJs('jquery-query');
+        $helper->AddJs('moment');
         $helper->AddJs('bootstrap');
         $helper->AddJs('schedular');
     }
@@ -33,6 +35,19 @@ class JihSchedularController {
         $startDate = new Date(Input::Param('date','now'));
 
         return JihViewHelper::getInstance()->LoadView('jih-dayview',array('startDate'=>$startDate));
+    }
+
+    public function WeekAction(){
+        $data = array();
+        $date = new Date(Input::Param('date','now'));
+        $dates = array($date);
+        while(count($dates)<7){
+            $dates[] = clone $date->addDay();
+        }
+        $data['dates'] = $dates;
+        $data['actionName'] = JIH_CONTROLLER_ACTION_PARAM;
+        $data['action'] = 'Week';
+        JihTwig::LoadView('day-view.twig',$data);
     }
 
     public function SavePrayerHourAction(){

@@ -26,4 +26,5 @@ class Date extends DateTime{
         $clone = clone $this;
         return $clone->addDay($days);
     }
+
 } 

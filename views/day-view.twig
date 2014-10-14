@@ -1,0 +1,46 @@
+{% extends 'test.twig' %}
+
+{% block content %}
+
+<div id="post-2" class="post-2 page type-page status-publish hentry">
+
+    <h2 class="page-title">Prayer Calendar</h2>
+    <div style="float:right;">
+        <select name="calendar" id="jih-calendar">
+            <option value="12">TestCalendar</option>
+        </select>
+        <a onclick="gotoToday()" class="btn btn-primary">Today</a>
+        <a onclick="gotoLastWeek()" class="btn btn-primary">&lt;</a>
+        <a onclick="gotoNextWeek()" class="btn btn-primary">&gt;</a>
+    </div>
+
+
+    <table id="jih-calendar-week" class="table table-striped table-bordered calendar fixed">
+        <thead>
+        <tr>
+            <th></th>
+            {%  for date in dates %}
+                <th>{{ date }}</th>
+
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in 0..24 %}
+        <tr>
+            <th>{{ i }}:00 - {{ i+1 }}:00</th>
+                {%  for date in dates %}
+                <td data-date="{{ date }}" data-time="{{ i }}:00"></td>
+                {% endfor %}
+        </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    <div class="entry clearfix">
+        <p>This is an example page. It’s different from a blog post because it will stay in one place and will show up in your site navigation (in most themes). Most people start with an About page that introduces them to potential site visitors. It might say something like this:</p>
+
+    </div>
+
+</div>
+
+{% endblock %}

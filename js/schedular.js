@@ -14,3 +14,28 @@ jQuery(document).ready(function(){
 
 
 });
+
+
+function gotoNextWeek(){
+    var $date = $.query.get('date') || moment().format('YYYY-MM-DD');
+    $date = moment($date).add(7,'days').format('YYYY-MM-DD');
+    gotoUrl($.query.set('date',$date).toString());
+}
+
+function gotoLastWeek(){
+    var $date = $.query.get('date') || moment().format('YYYY-MM-DD');
+    $date = moment($date).add(7,'days').format('YYYY-MM-DD');
+    gotoUrl($.query.set('date',$date).toString());
+}
+
+function gotoToday(){
+    gotoUrl($.query.remove('date').toString());
+}
+
+function getDate(){
+    return  $.query.get('date') || moment().format('YYYY-MM-DD');
+}
+
+function gotoUrl($url){
+    window.location.href = $url;
+}
