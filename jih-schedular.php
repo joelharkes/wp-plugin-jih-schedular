@@ -33,6 +33,7 @@ function AutoLoadJihSchedularFiles( $class ) {
     }
 }
 
+
 //CONTROLLER LOGIC
 $controller = new JihSchedularController();
 if(Input::Param(JIH_CONTROLLER_ACTION_PARAM)){

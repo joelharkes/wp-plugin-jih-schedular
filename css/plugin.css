@@ -14,10 +14,12 @@ table.table tbody > tr:nth-child(odd) > th {
 table.table tbody > tr:nth-child(even) > th {
     background-color: #FFF;
 }
-
-
 table.table tbody tr td:hover {
     background-color: #AAA;
+}
+
+table.fixed {
+    table-layout: fixed;
 }
 
 a.btn:link, a.btn:visited {

@@ -35,7 +35,7 @@ $date = $model['startDate'];
             </div>
 
 
-            <table id="jih-calendar-week" class="table table-striped calendar">
+            <table id="jih-calendar-week" class="table table-striped table-bordered calendar fixed">
                 <thead>
                 <tr>
                     <th></th>
