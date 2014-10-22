@@ -10,6 +10,8 @@ namespace db;
 
 
 use Exception;
+use ReflectionClass;
+use ReflectionProperty;
 
 abstract class AModel {
 
@@ -17,7 +19,7 @@ abstract class AModel {
     public static $_AutoIncrement=array();
 
     public function __construct(array $data){
-        $this->setAttributes($data);
+        $this->setAttributesSafe($data);
     }
 
     public static function CreateTableQuery($columnSql){
@@ -34,10 +36,12 @@ abstract class AModel {
      */
     public function getDbProperties(){
         $dbVars = array();
-        $vars = get_object_vars($this);
-        foreach($vars as $property => $value){
-            if(strpos($property, '_') !== 0 && in_array($property,static::$_AutoIncrement))
-                $dbVars[$property] =$value;
+        $ref = new ReflectionClass($this);
+        $props = $ref->getProperties(ReflectionProperty::IS_PROTECTED);
+        foreach($props as $property){
+            $name = $property->getName();
+            if(strpos($name, '_') !== 0 && !in_array($name,static::$_AutoIncrement))
+                $dbVars[$name] = $this->{'get'.ucfirst($name)}();
         }
         return $dbVars;
     }
@@ -47,9 +51,15 @@ abstract class AModel {
             $this->setAttribute($attribute,$value);
         }
     }
-
     public function setAttribute($attribute,$value){
-        $this->{'set'.$attribute}($value);
+        $this->{'set'.ucfirst($attribute)}($value);
+    }
+
+    public function setAttributesSafe(array $data){
+        foreach ($data as $attribute => $value) {
+            if(property_exists($this,$attribute))
+                $this->{'set'.ucfirst($attribute)}($value);
+        }
     }
 
     //Catch unimplemented set and get functions

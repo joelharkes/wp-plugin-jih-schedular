@@ -27,4 +27,11 @@ class Date extends DateTime{
         return $clone->addDay($days);
     }
 
+    public function DbEndOfDay(){
+        return $this->format("Y-m-d 23:59:59");
+    }
+
+    public function DbStartOfDay(){
+        return $this->format("Y-m-d 00:00:00");
+    }
 } 

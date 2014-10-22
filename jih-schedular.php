@@ -9,6 +9,7 @@ Author URI: http://URI_Of_The_Plugin_Author
 License: A "Slug" license name e.g. GPL2
 */
 
+
 define('JIH_PATH',plugin_dir_path( __FILE__ ));
 define('JIH_CONTROLLER_ACTION_PARAM','jih');
 define('AJAX_URL',WP_CONTENT_URL.'/plugins/jih-schedular/ajax.php');
@@ -33,11 +34,11 @@ function AutoLoadJihSchedularFiles( $class ) {
     }
 }
 
-$twigHelper = JihTwig::getInstance();
-$twigHelper->loadTemplate();
-$twigHelper->addTemplateData('yolo','it aint working!');
-
-$twig = $twigHelper->twig;
+//$twigHelper = Twig\WpTwigViewHelper::getInstance();
+//$twigHelper->loadTemplate();
+//$twigHelper->addTemplateData('yolo','it aint working!');
+//
+//$twig = $twigHelper->twig;
 
 
 //CONTROLLER LOGIC

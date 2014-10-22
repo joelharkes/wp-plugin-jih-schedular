@@ -9,7 +9,15 @@
 namespace db;
 
 
+use db\connections\MysqliConnection;
+use db\connections\PdoConnection;
+use db\connections\WpConnection;
+use ReflectionClass;
+use ReflectionProperty;
+
 class QueryBuilder{
+
+    public $preparePlaceholder = '?';
 
     private $db;
     private $modelName;
@@ -24,12 +32,16 @@ class QueryBuilder{
     public function __construct($model){
         $this->modelName = $model;
         $this->from = call_user_func($model .'::GetTable');
-        $this->db = new Connection();
+
+        //Switch here between databaseConnections :D
+        $this->db = new WpConnection();
+        //FOR WORDPRESS DB use %s instead of ?
+        $this->preparePlaceholder = '%s';
     }
 
 
     public function Where($column,$item=null){
-        if(strpos($column,'=')===false && strpos($column,' is')===false){ //preg_match('/^[\w_-\d]+$/',$column)
+        if(strpos($column,'=')===false && strpos($column,'>')===false && strpos($column,'<')===false && strpos($column,' is')===false){ //preg_match('/^[\w_-\d]+$/',$column)
             $column .= $item===null ? ' is' : ' =';
         }
         if($item == null) $item = 'null';
@@ -76,16 +88,17 @@ class QueryBuilder{
     public function BuildWhere(){
         $query = $this->BuildWherePrepare();
         foreach ($this->whereData as $value) {
-            $query = preg_replace('/?/', "'".$value."'", $query, 1);
+            $query = preg_replace('/'.preg_quote($this->preparePlaceholder).'/', "'".$value."'", $query, 1);
         }
 
         return $query;
     }
 
     public function BuildWherePrepare(){
+        $placeholder = $this->preparePlaceholder;
         if($this->where == null)
             return '';
-        return 'WHERE '.implode(' ?, ',$this->where).' ?';
+        return 'WHERE '.implode(" $placeholder AND ",$this->where)." $placeholder";
     }
 
     public function BuildOrderBy(){
@@ -116,19 +129,34 @@ class QueryBuilder{
     }
 
     public function Insert(AModel $model){
+        $placeholder = $this->preparePlaceholder;
         $data = $model->getDbProperties();
         $table = $model::GetTable();
         $columns = implode(', ',array_keys($data));
-        $values = implode(',',array_values($data));
-        $valueSql = substr(str_repeat('? ,',count($data)),0,-2);
-        return $this->db->CommandPrepare("INSERT INTO $table ($columns) VALUES ($valueSql)",$values);
+        $values = array_values($data);
+        $valueSql = substr(str_repeat("$placeholder, ",count($data)),0,-2);
+        return $this->db->CommandPrepared("INSERT INTO $table ($columns) VALUES ($valueSql)",$values);
     }
 
     public function Update(AModel $model){
+        $placeholder = $this->preparePlaceholder;
         $data = $model->getDbProperties();
         $table = $model::GetTable();
-        $columns = implode('= ?, ',array_keys($data)).'= ?';
-        $values = implode(',',array_values($data));
-        return $this->db->CommandPrepare("UPDATE $table SET $columns ".$this->BuildWhere().$this->BuildOrderBy().$this->BuildLimit(),$values);
+        $columns = implode("= $placeholder, ",array_keys($data)).'= '.$placeholder;
+        $values = array_values($data);
+        return $this->db->CommandPrepared("UPDATE $table SET $columns ".$this->BuildWhere().$this->BuildOrderBy().$this->BuildLimit(),$values);
+    }
+
+    //Now getDbProperties from AModel is used
+    public function GetModelProperties(AModel $model){
+        $dbVars = array();
+        $ref = new ReflectionClass($model);
+        $props = $ref->getProperties(ReflectionProperty::IS_PROTECTED);
+        foreach($props as $property){
+            $name = $property->getName();
+            if(strpos($name, '_') !== 0 && !in_array($name,$model::$_AutoIncrement))
+                $dbVars[$name] = $model->{'get'.ucfirst($name)}();
+        }
+        return $dbVars;
     }
 }

@@ -15,13 +15,13 @@ use db\AWPModel;
 class Record extends AWPModel {
     public static $_Table = 'jih_schedule_record';
 
-    public $scheduleId;
+    protected $scheduleId;
     /** @var Date $datetime */
-    public $datetime;
-    public $name;
-    public $email;
-    public $pin;
-    public $description;
+    protected $datetime;
+    protected $name;
+    protected $email;
+    protected $pin;
+    protected $description;
 
 
     public static function CreateTableQuery()

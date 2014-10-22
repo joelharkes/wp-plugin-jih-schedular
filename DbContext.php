@@ -9,10 +9,12 @@
 class DbContext {
 
 
-    public $Schedules;
-
     public function Schedules(){
         return new \db\QueryBuilder(\models\Schedule::ClassName());
+    }
+
+    public function Records(){
+        return new \db\QueryBuilder(\models\Record::ClassName());
     }
 
     /**

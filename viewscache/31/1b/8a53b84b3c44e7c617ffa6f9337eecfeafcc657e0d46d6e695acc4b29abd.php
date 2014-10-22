@@ -11,6 +11,7 @@ class __TwigTemplate_311b8a53b84b3c44e7c617ffa6f9337eecfeafcc657e0d46d6e695acc4b
 
         $this->blocks = array(
             'content' => array($this, 'block_content'),
+            'modals' => array($this, 'block_modals'),
         );
     }
 
@@ -110,8 +111,77 @@ class __TwigTemplate_311b8a53b84b3c44e7c617ffa6f9337eecfeafcc657e0d46d6e695acc4b
     </div>
 
 </div>
-
 ";
+        // line 45
+        $this->displayBlock('modals', $context, $blocks);
+        // line 98
+        echo "
+
+    <script>
+        var items = ";
+        // line 101
+        echo twig_escape_filter($this->env, twig_jsonencode_filter((isset($context["items"]) ? $context["items"] : null)), "html", null, true);
+        echo "
+    </script>
+";
+    }
+
+    // line 45
+    public function block_modals($context, array $blocks = array())
+    {
+        // line 46
+        echo "    <div id=\"jih-plan-hour\" class=\"modal fade\">
+        <div class=\"modal-dialog\">
+            <div class=\"modal-content\">
+                <div class=\"modal-header\">
+                    <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">Close</span></button>
+                    <h4 class=\"modal-title\">Schedule Prayer Hour</h4>
+                </div>
+                <form class=\"form-horizontal\" role=\"form\" action=\"/?<?= \$act ?>=SavePrayerHour\" method=\"post\">
+                    <div class=\"modal-body\">
+                            <div class=\"hide\">
+                            <input id=\"jih-calendar-id\" type=\"text\" class=\"form-control\" name=\"scheduleId\" placeholder=\"Date\" value=\"1\">
+                        </div>
+                        <div class=\"form-group\">
+                            <label for=\"jih-date\" class=\"col-sm-2 control-label\">Datetime</label>
+                            <div class=\"col-sm-10\">
+                                <input id=\"jih-date\" type=\"datetime\" class=\"form-control\" name=\"datetime\" placeholder=\"Date\">
+                            </div>
+                        </div>
+                        <div class=\"form-group\">
+                            <label for=\"jih-name\" class=\"col-sm-2 control-label\">Name</label>
+                            <div class=\"col-sm-10\">
+                                <input id=\"jih-name\" type=\"text\" class=\"form-control\" name=\"name\" placeholder=\"Name\">
+                            </div>
+                        </div>
+                        <div class=\"form-group\">
+                            <label for=\"jih-email\" class=\"col-sm-2 control-label\">Email</label>
+                            <div class=\"col-sm-10\">
+                                <input type=\"email\" class=\"form-control\" id=\"jih-email\" name=\"email\" placeholder=\"Email\">
+                            </div>
+                        </div>
+                        <div class=\"form-group\">
+                            <label for=\"jih-email\" class=\"col-sm-2 control-label\">Description</label>
+                            <div class=\"col-sm-10\">
+                                <textarea id=\"jih-description\" class=\"form-control\" rows=\"3\" name=\"description\" placeholder=\"Description\"></textarea>
+                            </div>
+                        </div>
+                        <div class=\"form-group\">
+                            <label for=\"jih-pin\" class=\"col-sm-2 control-label\">Pincode</label>
+                            <div class=\"col-sm-10\">
+                                <input type=\"text\" name=\"pin\" class=\"form-control\" id=\"jih-pin\" placeholder=\"Pin\">
+                            </div>
+                        </div>
+                    </div>
+                    <div class=\"modal-footer\">
+                        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>
+                        <button type=\"submit\" class=\"btn btn-primary\">Save</button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    ";
     }
 
     public function getTemplateName()
@@ -126,6 +196,6 @@ class __TwigTemplate_311b8a53b84b3c44e7c617ffa6f9337eecfeafcc657e0d46d6e695acc4b
 
     public function getDebugInfo()
     {
-        return array (  106 => 38,  98 => 35,  87 => 33,  83 => 32,  77 => 31,  74 => 30,  70 => 29,  65 => 26,  55 => 23,  51 => 22,  31 => 4,  28 => 3,);
+        return array (  133 => 46,  130 => 45,  123 => 101,  118 => 98,  116 => 45,  107 => 38,  99 => 35,  88 => 33,  84 => 32,  78 => 31,  75 => 30,  71 => 29,  66 => 26,  56 => 23,  52 => 22,  32 => 4,  29 => 3,);
     }
 }

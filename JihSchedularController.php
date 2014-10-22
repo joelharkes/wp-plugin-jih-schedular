@@ -8,6 +8,8 @@
 
 class JihSchedularController {
 
+    protected $dbContext;
+
     /**
      *  Constructor
      */
@@ -19,6 +21,8 @@ class JihSchedularController {
         $helper->AddJs('moment');
         $helper->AddJs('bootstrap');
         $helper->AddJs('schedular');
+
+        $this->dbContext = new DbContext();
     }
 
     public function route($action){
@@ -40,35 +44,34 @@ class JihSchedularController {
     public function WeekAction(){
         $data = array();
         $date = new Date(Input::Param('date','now'));
-        $dates = array($date);
+        $startDate = clone $date;
+        $dates = array(clone $date);
         while(count($dates)<7){
             $dates[] = clone $date->addDay();
         }
+        $data['records'] = $this->dbContext->Records()->Where('datetime >=',$startDate->DbStartOfDay())->Where('datetime <=',$date->DbEndOfDay());
         $data['dates'] = $dates;
         $data['actionName'] = JIH_CONTROLLER_ACTION_PARAM;
         $data['action'] = 'Week';
-        JihTwig::LoadView('day-view.twig',$data);
+        Twig\WpTwigViewHelper::LoadView('day-view.twig',$data);
     }
 
     public function SavePrayerHourAction(){
         global $wpdb;
         $recordTable = $wpdb->prefix . 'jih_schedule_record';
 
+        $model = new \models\Record($_POST);
+//        die(var_dump($model));
+        $this->dbContext->Records()->Insert($model);
+//
         $date = new Date(Input::Param('datetime'));
-        $wpdb->insert(
-            $recordTable,
-            array(
-                'scheduleId' => Input::Param('scheduleId',1),
-                'datetime' => $date->format("Y-m-d H:00:00"),
-                'name' => Input::Param('name'),
-                'email' => Input::Param('email'),
-                'pin' => Input::Param('pin'),
-                'description' => Input::Param('description')
-            )
-        );
-
         $_POST['date'] = $date;
-        $this->WeekViewAction();
+
+        if($url = Input::Post('redirectUrl')){
+            header('location: '.$url,true,302); exit;
+        }
+
+
     }
 
 

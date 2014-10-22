@@ -6,25 +6,26 @@
  * Time: 16:31
  */
 
-namespace db;
+namespace db\connections;
 
 
+use db\ResultSet;
 use mysqli_result;
 use mysqli_stmt;
 
-class Connection{
-    protected $mysqli;
+class MysqliConnection implements IConnection{
+    protected $connection;
 
     public function __construct($mysqli=null){
         if($mysqli!=null){
-            $this->mysqli = $mysqli;
+            $this->connection = $mysqli;
         } else {
             global $wpdb;
             if(method_exists($wpdb,'getDbConnection')){
-                $this->mysqli = $wpdb->getDbConnection();
+                $this->connection = $wpdb->getDbConnection();
             } else {
-                $this->mysqli = mysqli_init();
-                mysqli_real_connect( $this->mysqli, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+                $this->connection = mysqli_init();
+                mysqli_real_connect( $this->connection, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
             }
         }
     }
@@ -36,40 +37,39 @@ class Connection{
      */
     public function __call($name, $arguments)
     {
-        return call_user_func_array(array($this->mysqli,$name),$arguments);
+        return call_user_func_array(array($this->connection,$name),$arguments);
     }
 
     /**
      * @param string $sql
      * @param array $values
-     * @param int $resultType
      * @return array
      */
-    public function ExecutePrepared($sql,$values,$resultType = MYSQLI_ASSOC){
+    public function ExecutePrepared($sql,$values){
         $stmt = $this->prepare($sql,$values);
         $stmt->execute();
-        return new ResultSet($stmt->get_result()->fetch_all($resultType));
+        return new ResultSet($stmt->get_result()->fetch_all(MYSQLI_ASSOC));
     }
 
     /**
      * @param string $sql
-     * @param int $resultType
      * @return array
      */
-    public function Execute($sql,$resultType = MYSQLI_ASSOC){
-        return new ResultSet($this->mysqli->query($sql)->fetch_all($resultType));
+    public function Execute($sql){
+        return new ResultSet($this->connection->query($sql)->fetch_all(MYSQLI_ASSOC));
     }
 
     public function Command($sql){
-        return $this->mysqli->query($sql);
+        return $this->connection->query($sql);
     }
 
-    public function CommandPrepare($sql,$values){
+    public function CommandPrepared($sql,$values){
         return $this->prepare($sql,$values)->execute();
     }
 
     private function prepare($sql,$values){
-        $stmt = $this->mysqli->prepare($sql);
+        throw new \Exception('Not correctly implemented Yes');
+        $stmt = $this->connection->prepare($sql);
         foreach ($values as $value) {
             $stmt->bind_param('s',$value);
         }

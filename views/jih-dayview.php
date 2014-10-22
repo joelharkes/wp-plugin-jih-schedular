@@ -85,6 +85,7 @@ $date = $model['startDate'];
                 <form class="form-horizontal" role="form" action="/?<?= $act ?>=SavePrayerHour" method="post">
                     <div class="hide">
                         <input id="jih-calendar-id" type="text" class="form-control" name="scheduleId" placeholder="Date" value="1">
+                        <input id="redirect-url" type="text" class="form-control" name="redirectUrl" value="">
                     </div>
                     <div class="form-group">
                         <label for="jih-date" class="col-sm-2 control-label">Datetime</label>
@@ -113,7 +114,7 @@ $date = $model['startDate'];
                     <div class="form-group">
                         <label for="jih-pin" class="col-sm-2 control-label">Pincode</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="jih-pin" placeholder="Pin">
+                            <input type="text" name="pin" class="form-control" id="jih-pin" placeholder="Pin">
                         </div>
                     </div>
                 </div>

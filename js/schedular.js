@@ -9,6 +9,7 @@ jQuery(document).ready(function(){
 
     $('#jih-calendar-week tbody td').click(function(){
         $('#jih-date').val($(this).data('date')+ ' ' +$(this).data('time'))
+        $('#redirect-url').val(document.URL);
         $(modal).modal('show');
     })
 
