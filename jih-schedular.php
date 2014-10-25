@@ -11,7 +11,7 @@ License: A "Slug" license name e.g. GPL2
 
 
 define('JIH_PATH',plugin_dir_path( __FILE__ ));
-define('JIH_CONTROLLER_ACTION_PARAM','jih');
+define('JIH_CONTROLLER_ACTION_PARAM','Action');
 define('AJAX_URL',WP_CONTENT_URL.'/plugins/jih-schedular/ajax.php');
 
 //INSTALL SCRIPT

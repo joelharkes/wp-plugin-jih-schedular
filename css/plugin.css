@@ -26,3 +26,26 @@ a.btn:link, a.btn:visited {
     font-weight: bold;
     color: white;
 }
+
+/* for minezine */
+#container .header-content,
+#wrapper #container #main-content,
+#footer,
+#header .menu-box,
+#main-content{
+    width: 100%; !important;
+
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.center {
+    /*display: inline-block;*/
+    text-align: center;
+}

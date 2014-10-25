@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header(); ?>
 
 <?php // Get Theme Options from Database
-$theme_options = dynamicnews_theme_options();
+//$theme_options = dynamicnews_theme_options();
 $act = JIH_CONTROLLER_ACTION_PARAM;
 $model = JihViewHelper::getInstance()->viewData;
 /** @var Date $date */

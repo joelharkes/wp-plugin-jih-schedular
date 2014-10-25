@@ -54,12 +54,12 @@ class WpTwigViewHelper extends Singleton {
         return $this->template->render($this->templateData);
     }
 
-    public function loadTemplate($template = 'test.twig'){
+    public function loadTemplate($template = 'theme-mine-zine.twig'){
         $this->template = $this->twig->loadTemplate($template);
         JihViewHelper::getInstance()->LoadView('default-template');
     }
 
-    public static function LoadView($template = 'test.twig',array $templateData = array(),$overwrite = false){
+    public static function LoadView($template = 'theme-mine-zine.twig',array $templateData = array(),$overwrite = false){
         $i = static::getInstance();
         $i->mergeTemplateData($templateData,$overwrite);
         $i->loadTemplate($template);

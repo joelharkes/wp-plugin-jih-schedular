@@ -15,12 +15,14 @@ class JihSchedularController {
      */
     public function __construct(){
         $helper = JihViewHelper::getInstance();
-        $helper->AddCss('plugin');
-        $helper->AddCss('bootstrap');
-        $helper->AddJs('jquery-query');
-        $helper->AddJs('moment');
-        $helper->AddJs('bootstrap');
-        $helper->AddJs('schedular');
+        $helper->AddCss('css/plugin',"plugin");
+        $helper->AddCss('lib/bootstrap-3.2.0/css/bootstrap',"bootstrap");
+//
+        $helper->AddJs('lib/bootstrap-3.2.0/js/bootstrap','bootstrap');
+        $helper->AddJs('lib/jquery-query','jquery-query');
+        $helper->AddJs('lib/moment-2.8.3/moment','moment');
+
+        $helper->AddJs('js/schedular');
 
         $this->dbContext = new DbContext();
     }
