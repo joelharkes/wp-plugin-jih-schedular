@@ -10,9 +10,9 @@ namespace models;
 
 use db\AWPModel;
 
-class Schedule extends AWPModel {
+class Calendar extends AWPModel {
 
-    public static $_Table = 'jih_schedule';
+    public static $_Table = 'jih_calendar';
     public static $_AutoIncrement=array('id');
 
     public $id;

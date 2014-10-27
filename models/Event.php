@@ -12,9 +12,11 @@ namespace models;
 use Date;
 use db\AWPModel;
 
-class Record extends AWPModel {
-    public static $_Table = 'jih_schedule_record';
+class Event extends AWPModel {
+    public static $_Table = 'jih_event';
+    public static $_AutoIncrement=array('id');
 
+    protected $id;
     protected $scheduleId;
     /** @var Date $datetime */
     protected $datetime;
@@ -27,13 +29,15 @@ class Record extends AWPModel {
     public static function CreateTableQuery()
     {
         return parent::CreateTableQuery("
+            id int NOT NULL AUTO_INCREMENT,
             scheduleId int NOT NULL,
             datetime datetime NOT NULL,
             name VARCHAR(100) NOT NULL,
             email VARCHAR (100) NULL,
             pin VARCHAR(4) NULL,
             description text  NULL,
-            PRIMARY KEY (scheduleId,`datetime`)
+            PRIMARY KEY (id),
+            UNIQUE KEY `calendar_date` (`scheduleId`,`datetime`)
 		");
     }
 

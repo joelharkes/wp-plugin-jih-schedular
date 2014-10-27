@@ -51,7 +51,7 @@ class JihSchedularController {
         while(count($dates)<7){
             $dates[] = clone $date->addDay();
         }
-        $data['records'] = $this->dbContext->Records()->Where('datetime >=',$startDate->DbStartOfDay())->Where('datetime <=',$date->DbEndOfDay());
+        $data['records'] = $this->dbContext->Events()->Where('datetime >=',$startDate->DbStartOfDay())->Where('datetime <=',$date->DbEndOfDay());
         $data['dates'] = $dates;
         $data['actionName'] = JIH_CONTROLLER_ACTION_PARAM;
         $data['action'] = 'Week';
@@ -62,9 +62,9 @@ class JihSchedularController {
         global $wpdb;
         $recordTable = $wpdb->prefix . 'jih_schedule_record';
 
-        $model = new \models\Record($_POST);
+        $model = new \models\Event($_POST);
 //        die(var_dump($model));
-        $this->dbContext->Records()->Insert($model);
+        $this->dbContext->Events()->Insert($model);
 //
         $date = new Date(Input::Param('datetime'));
         $_POST['date'] = $date;
