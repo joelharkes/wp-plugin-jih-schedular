@@ -17,9 +17,7 @@ class Event extends AWPModel {
     public static $_PrimaryKey='id';
 
     protected $id;
-
-    //Todo Refactor to calendarID
-    protected $scheduleId;
+    protected $calendarId;
     /** @var Date $datetime */
     protected $datetime;
     protected $name;
@@ -32,14 +30,14 @@ class Event extends AWPModel {
     {
         return parent::CreateTableQuery("
             id int NOT NULL AUTO_INCREMENT,
-            scheduleId int NOT NULL,
+            calendarId int NOT NULL,
             datetime datetime NOT NULL,
             name VARCHAR(100) NOT NULL,
             email VARCHAR (100) NULL,
             pin VARCHAR(4) NULL,
             description text  NULL,
             PRIMARY KEY (id),
-            UNIQUE KEY `calendar_date` (`scheduleId`,`datetime`)
+            UNIQUE KEY `calendar_date` (`calendarId`,`datetime`)
 		");
     }
 

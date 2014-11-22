@@ -10,7 +10,7 @@
             <tbody>
             <tr class="form-field">
                 <th><label for="event-calendar">CalendarId</label></th>
-                <td><select name="scheduleId" id="event-calendar">
+                <td><select name="calendarId" id="event-calendar">
                         {% for calendar in calendars %}
                             <option value="{{ calendar.id }}" {{ calendar.id==event.sheduleId ? 'selected' }}>{{ calendar.name }}</option>
                         {% endfor %}

@@ -23,7 +23,7 @@ jQuery(document).ready(function(){
     $eventForm.submit(function(e){
         e.preventDefault();
         var data = $eventForm.serializeObject();
-        data.scheduleId = _calendarId;
+        data.calendarId = _calendarId;
         api.SaveEvent(data,onSuccesEventSave);
     });
 

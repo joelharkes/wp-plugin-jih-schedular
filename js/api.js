@@ -9,8 +9,8 @@ var api = {};
         post('EventById',{id : id},onSuccess,onError)
     };
 
-    api.EventsForWeek = function(scheduleId, date,onSuccess,onError){
-        post('EventsForWeek',{scheduleId : scheduleId, date : date.format(_datetimeFormat)},onSuccess,onError)
+    api.EventsForWeek = function(calendarId, date,onSuccess,onError){
+        post('EventsForWeek',{calendarId : calendarId, date : date.format(_datetimeFormat)},onSuccess,onError)
     };
 
     api.SaveEvent = function(data,onSuccess,onError){
