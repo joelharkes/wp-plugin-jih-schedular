@@ -62,7 +62,7 @@ if(!is_admin()){
     add_action( 'admin_menu', 'register_admin_menu');
     function register_admin_menu(){
         add_menu_page( 'Jih Schedular', 'Schedular', 'manage_options', 'jih-calendars', 'adminAction','dashicons-calendar' );
-        addSubMenu('Records');
+        addSubMenu('Events');
         addSubMenu('NewCalendar');
 
     }

@@ -45,8 +45,20 @@ class AdminController extends Controller{
 
     public function NewCalendarAction(){
         $data=array();
-        WpTwigViewHelper::LoadView('admin-schedule-new.twig',$data);
+        WpTwigViewHelper::LoadView('admin-schedule-form.twig',$data);
         WpTwigViewHelper::getInstance()->TryRender();
+    }
+
+    public function  EventsAction(){
+
+        $data = array();
+        $cal = $this->dbContext->Events();
+        if($search = urldecode(\Input::Get('search'))){
+            $cal->WhereLike('name',$search);
+        }
+        $data['events'] = $cal->Execute();
+        $data['search'] = $search;
+        WpTwigViewHelper::LoadView('admin-event-overview.twig',$data);
     }
 
 //    protected function saveCalendar($data){

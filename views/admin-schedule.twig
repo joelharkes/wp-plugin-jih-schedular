@@ -12,19 +12,20 @@
     <thead>
     <tr>
         <th style="width: 24px;"><label for="cal-header"></label><input type="checkbox" id="cal-header"></th>
-        <th style="width: 24px"></th>
         <th style="width: 100px;">Id</th>
         <th>Name</th>
-
+        <th>Description</th>
+        <th style="width: 54px"></th>
     </tr>
     </thead>
 <tbody>
 {% for calendar in calendars %}
 <tr>
     <th><label for="cal-{{ calendar.id }}"></label><input type="checkbox" id="cal-{{ calendar.id }}"></th>
-    <th><input type="button" onclick="DeleteCalendar({{ calendar.id }})" value="x" /></th>
     <td>{{ calendar.id }}</td>
     <td>{{ calendar.name }}</td>
+    <td>{{ calendar.description|escape }}</td>
+    <th><input type="button" onclick="DeleteCalendar({{ calendar.id }})" value="Delete" /></th>
 </tr>
 
 {% endfor %}

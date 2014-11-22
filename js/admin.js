@@ -18,6 +18,10 @@ function DeleteCalendar($id){
     })
 }
 
-function ShowNewCalenderModal(){
-    jQuery('#jih-calendar-modal').modal('show')
+
+function DeleteEvent($id){
+    api.DeleteEvent($id,function(){
+        GotoUrl();
+    })
 }
+

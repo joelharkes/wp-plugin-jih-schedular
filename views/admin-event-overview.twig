@@ -1,0 +1,37 @@
+<h2>Events <a href="?page=jih-NewEvent" class="add-new-h2">Add New</a>
+</h2>
+
+<form id="search-form" method="get" action="">
+    <p class="search-box">
+        <label class="screen-reader-text" for="plugin-search-input">Search Calendars:</label>
+        <input type="search" id="plugin-search-input" name="search" value="{{ search }}" placeholder="user name">
+        <input type="submit" id="search-submit" class="button" value="Search Calendars"></p>
+</form>
+
+<table class="wp-list-table widefat fixed selectable">
+    <thead>
+    <tr>
+        <th style="width: 24px;"><label for="cal-header"></label><input type="checkbox" id="cal-header"></th>
+        <th style="width: 48px;">Id</th>
+        <th style="width: 48px">CalId</th>
+        <th>Date</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th style="width: 54px"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for event in events %}
+        <tr>
+            <th><label for="cal-{{ event.id }}"></label><input type="checkbox" id="cal-{{ event.id }}"></th>
+            <td>{{ event.id }}</td>
+            <td>{{ event.scheduleId }}</td>
+            <td>{{ event.datetime }}</td>
+            <td>{{ event.name }}</td>
+            <td>{{ event.description|escape }}</td>
+            <th><input type="button" onclick="DeleteEvent({{ event.id }})" value="Delete" /></th>
+        </tr>
+
+    {% endfor %}
+    </tbody>
+</table>
