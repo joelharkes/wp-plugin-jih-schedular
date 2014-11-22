@@ -32,19 +32,22 @@ class WpTwigViewHelper extends Singleton {
             'cache' => JIH_PATH.'viewscache',
             'debug' => $debug
         ));
+        if($debug)
+            $this->twig->addExtension(new \Twig_Extension_Debug());
         $this->addFunction('get_sidebar');
         $this->addFunction('get_header');
         $this->addFunction('get_footer');
         $this->addFunction('get_template_part');
         $this->addFunction('get_search_form');
-    }
 
+        $this->templateData['user'] = \wp_get_current_user();
+//        wp_get_current_commenter();
+    }
 
     private function addFunction($string){
         $func = new FunctionWrapper($string);
         $func->add_to_twig($this->twig);
     }
-
 
     public function addTemplateData($key,$data){
         $this->templateData[$key] = $data;
@@ -68,7 +71,6 @@ class WpTwigViewHelper extends Singleton {
     public function mergeTemplateData(array $data,$overwrite = false){
         $this->templateData = $overwrite ? $data : array_merge($this->templateData,$data);
     }
-
 
 }
 

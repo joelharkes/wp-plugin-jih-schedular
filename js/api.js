@@ -3,14 +3,37 @@
  */
 var api = {};
 (function($) {
+    var _datetimeFormat = 'YYYY-MM-DD HH:mm:ss';
+
     api.EventById = function(id,onSuccess,onError){
         post('EventById',{id : id},onSuccess,onError)
+    };
+
+    api.EventsForWeek = function(scheduleId, date,onSuccess,onError){
+        post('EventsForWeek',{scheduleId : scheduleId, date : date.format(_datetimeFormat)},onSuccess,onError)
+    };
+
+    api.SaveEvent = function(data,onSuccess,onError){
+        post('SaveEvent',data,onSuccess,onError)
+    };
+
+    api.DeleteEvent = function(id,onSuccess,onError){
+        post('DeleteEvent',id,onSuccess,onError)
+    };
+
+    api.SaveCalendar = function(data,onSuccess,onError){
+        post('SaveCalendar',data,onSuccess,onError)
+    };
+
+    api.DeleteCalendar = function(id,onSuccess,onError){
+        post('DeleteCalendar',id,onSuccess,onError)
     };
 
 
     var post = function(action,input,onSuccess, onError, options){
         var data = {
             action : action,
+            dataType : 'json',
             input : input
         };
 
@@ -20,7 +43,7 @@ var api = {};
             data : data,
             dataType : 'json',
             success : IsDefined(onSuccess) ? onSuccess : Log,
-            error : IsDefined(onError) ? onError : OnError,
+            error : IsDefined(onError) ? onError : DefaultOnErrorHandling,
             statusCode: {
                 404: function() {
                     alert( "page not found" );
@@ -34,9 +57,9 @@ var api = {};
         $.ajax(defaults);
     };
 
-    var OnError = function(result,textStatus,thrownError){
+    var DefaultOnErrorHandling = function(result,textStatus,thrownError){
         Log(result);
-        alert('Error: '+code+', '+thrownError);
+        alert("Request failed with: "+textStatus.ucFirst()+": "+thrownError+"\nMessage: "+result.responseJSON+"\nSee log for detailed error.");
     }
 
 })(jQuery);

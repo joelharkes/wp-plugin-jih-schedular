@@ -13,11 +13,11 @@ use db\AWPModel;
 class Calendar extends AWPModel {
 
     public static $_Table = 'jih_calendar';
-    public static $_AutoIncrement=array('id');
+    public static $_PrimaryKey='id';
 
-    public $id;
-    public $name;
-    public $description;
+    protected $id;
+    protected $name;
+    protected $description;
 
 
     public static function CreateTableQuery(){
@@ -25,7 +25,7 @@ class Calendar extends AWPModel {
             id int NOT NULL AUTO_INCREMENT,
             name VARCHAR(100) DEFAULT 'No Name' NOT NULL,
             description text NOT NULL,
-            PRIMARY KEY id (id)'
+            PRIMARY KEY id (id)
 		");
     }
 }

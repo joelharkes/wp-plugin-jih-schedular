@@ -16,9 +16,10 @@ use ReflectionProperty;
 abstract class AModel {
 
     public static $_Table;
-    public static $_AutoIncrement=array();
+    //Also Used As Primary Key
+    public static $_PrimaryKey=array();
 
-    public function __construct(array $data){
+    public function __construct(array $data = array()){
         $this->setAttributesSafe($data);
     }
 
@@ -40,7 +41,7 @@ abstract class AModel {
         $props = $ref->getProperties(ReflectionProperty::IS_PROTECTED);
         foreach($props as $property){
             $name = $property->getName();
-            if(strpos($name, '_') !== 0 && !in_array($name,static::$_AutoIncrement))
+            if(strpos($name, '_') !== 0 && $name != static::$_PrimaryKey)
                 $dbVars[$name] = $this->{'get'.ucfirst($name)}();
         }
         return $dbVars;

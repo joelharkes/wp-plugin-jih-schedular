@@ -8,20 +8,27 @@
 
 class Input {
 
-    public static function Post($item,$default=null){
+    public static function Post($item=null,$default=null){
+        if($item==null)
+            return  !empty($_POST) ? $_POST : $default;
         return  isset($_POST[$item]) ? $_POST[$item] : $default;
     }
 
-    public static function Get($item,$default=null){
+    public static function Get($item=null,$default=null){
+        if($item==null)
+            return  !empty($_GET) ? $_GET : $default;
         return  isset($_GET[$item]) ? $_GET[$item] : $default;
     }
 
-    public static function Cookie($item,$default=null){
+    public static function Cookie($item=null,$default=null){
+        if($item==null)
+            return  !empty($_COOKIE) ? $_COOKIE : $default;
         return  isset($_COOKIE[$item]) ? $_COOKIE[$item] : $default;
     }
 
-    public static function Param($item,$default=null){
-        return self::Post($item) ?: self::Get($item) ?: self::Cookie($item) ?: $default;
+    public static function Param($item=null,$default=null){
+        if($item==null)
+            return  !empty($_REQUEST) ? $_REQUEST : $default;
+        return  isset($_REQUEST[$item]) ? $_REQUEST[$item] : $default;
     }
-
 }

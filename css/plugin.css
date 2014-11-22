@@ -27,7 +27,19 @@ a.btn:link, a.btn:visited {
     color: white;
 }
 
+/* For Calendar */
+table.table tbody tr td.is-filled {
+    background-color: #9fbdff;
+}
+
+
 /* for minezine */
+/** {*/
+    /*-webkit-box-sizing: content-box !important;*/
+    /*-moz-box-sizing: content-box !important;;*/
+    /*box-sizing: content-box !important;;*/
+/*}*/
+
 #container .header-content,
 #wrapper #container #main-content,
 #footer,
@@ -46,6 +58,19 @@ a.btn:link, a.btn:visited {
 }
 
 .center {
-    /*display: inline-block;*/
+    display: inline-block;
     text-align: center;
+}
+
+#searchform .searchform-wrapper #s {
+    height: 31px !important;
+
+}
+
+.form-control {
+    background-color: #fff !important;
+    border: 1px solid #ccc !important;
+    width: 100%  !important;
+    padding: 6px 12px  !important;
+    font-size: 14px  !important;
 }

@@ -49,6 +49,7 @@
         {% endfor %}
     </table>
     <div class="entry clearfix">
+        {{ dump(user) }}
         <p>This is an example page. It’s different from a blog post because it will stay in one place and will show up
             in your site navigation (in most themes). Most people start with an About page that introduces them to
             potential site visitors. It might say something like this:</p>
@@ -62,9 +63,9 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                                     class="sr-only">Close</span></button>
-                        <h4 class="modal-title">Schedule Prayer Hour</h4>
+                        <h4 class="modal-title">Schedule an Prayer Hour</h4>
                     </div>
-                    <form class="form-horizontal" role="form" action="/?<?= $act ?>=SavePrayerHour" method="post">
+                    <form id="schedular-event-form" class="form-horizontal" role="form" action="/" method="post">
                         <div class="modal-body">
                             <div class="hide">
                                 <input id="jih-calendar-id" type="text" class="form-control" name="scheduleId"
@@ -125,7 +126,6 @@
 
 
     <script>
-        var items =
-        {{ items|json_encode }}
+        var items = {{ items|json_encode }};
     </script>
 {% endblock %}

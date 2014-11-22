@@ -49,6 +49,7 @@ class JihViewHelper extends Singleton {
         $this->jsPaths[] = array($overwriteFileName ?: $fileName,$path,$dependencies);
         if(count($this->jsPaths)<=1){
             add_action( 'wp_enqueue_scripts',  array( __CLASS__, 'GetJS' ) );
+            add_action( 'admin_enqueue_scripts',  array( __CLASS__, 'GetJS' ) );
         }
         if(!file_exists($path = JIH_PATH.$fileName.'.js')){
             throw new Exception("File: $path does not exist!");
@@ -66,6 +67,7 @@ class JihViewHelper extends Singleton {
         $this->cssPaths[] = array($overwriteFileName ?: $fileName,$path,$dependencies);
         if(count($this->cssPaths)<=1){
             add_action( 'wp_enqueue_scripts',  array( __CLASS__, 'GetCSS' ) );
+            add_action( 'admin_enqueue_scripts',  array( __CLASS__, 'GetCSS' ) );
         }
         if(!file_exists($path = JIH_PATH.$fileName.'.css')){
             throw new Exception("File: $path does not exist!");

@@ -4,75 +4,111 @@
 var $ = jQuery;
 jQuery(document).ready(function(){
     var $ = jQuery;
-    _calenderEl = $('#jih-calendar');
+    _calendarEl = $('#jih-calendar');
+    var $eventForm = $('#schedular-event-form');
+    $eventModal = $('#jih-plan-hour');
 
-    var modal = $('#jih-plan-hour');
-
-    $('tbody td',_calenderEl).click(function(){
+    $('tbody td',_calendarEl).click(function(){
         //alert(getDateFromElement(this));
         Log (getDateFromElement(this));
-        $('#jih-date').val($(this).data('date')+ ' ' +$(this).data('time'))
+
+        $('#jih-date').val(getDateFromElement(this).format(_datetimeFormat));
         $('#redirect-url').val(document.URL);
-        $(modal).modal('show');
-    })
+        $($eventModal).modal('show');
+    });
 
-    $('#calendar-header-date').text(_date.format('MMMM'))
+    $('#calendar-header-date').text(_date.format('MMMM'));
 
+
+    $eventForm.submit(function(e){
+        e.preventDefault();
+        api.SaveEvent($eventForm.serializeObject(),onSuccesEventSave);
+    });
+
+    setCalendarOnDate(_date);
 });
 
+var onSuccesEventSave = function(){
+    $eventModal.modal('hide');
+    reloadCalendar();
+};
+
+var $eventModal;
 //Initial values
-var _calenderEl = null;
+var _calendarSize = 7;
+var _calendarId = 1;
+var _calendarEl = null;
 var _date = moment().startOf('day');
 var CurDate = function(){
     return _date.clone();
 };
 var _dateFormat = 'YYYY-MM-DD';
+var _datetimeFormat = 'YYYY-MM-DD HH:mm:ss';
 
 //END Initial values
 
 function gotoNextWeek(){
-    setcalendarOnDate(CurDate().add(7,'days'));
+    setCalendarOnDate(CurDate().add(7,'days'));
 }
 
 function gotoLastWeek(){
-    setcalendarOnDate(CurDate().subtract(7,'days'));
+    setCalendarOnDate(CurDate().subtract(7,'days'));
 }
 
 function gotoToday(){
-    setcalendarOnDate(Today());
+    setCalendarOnDate(Today());
 }
 
 function getDate(){
     return  $.query.get('date') || moment().format('YYYY-MM-DD');
 }
 
-function gotoUrl($url){
-    window.location.href = $url;
-}
 
-function setcalendarOnDate(date){
-    $('thead th',_calenderEl).each(function(i){
+
+function setCalendarOnDate(date){
+    $('thead th',_calendarEl).each(function(i){
         if(i>0){
             $(this).text(CurDate().add(i-1,'days').format(_dateFormat));
         }
     });
     _date = date;
+    loadCalendarEvents(date);
 }
 
 function getDateFromElement(el){
-    var index = $('td',_calenderEl).index(el);
+    var index = $('td',_calendarEl).index(el);
     var hour = Math.floor(index/7);
     var daysFromDate = index%7;
     return CurDate().add(daysFromDate,'days').add(hour,'hours')
 }
 
-
-
-//Util Functinos
-function Log(input){
-    console.log(input);
+function getElementFromDate(date){
+    var days = date.diff(_date,'days');
+    var hours = date.hours();
+    var index = (hours * _calendarSize) + days;
+    return $('td',_calendarEl).eq(index);
 }
 
-function Today(){
-    return moment().startOf('day');
+function reloadCalendar(){
+    setCalendarOnDate(_date);
+    loadCalendarEvents(_date);
+}
+
+function loadCalendarEvents(date){
+    emptyCalendar();
+    api.EventsForWeek(_calendarId,date,saturateCalendar);
+}
+
+
+var filledClass = 'is-filled';
+
+function saturateCalendar(events){
+    $.each( events, function( index, event ) {
+        $dateEl = getElementFromDate(moment(event.datetime));
+        $dateEl.addClass(filledClass).text(event.name);
+    });
+}
+
+function emptyCalendar(){
+    $('.'+filledClass,_calendarEl).removeClass(filledClass).text('');
 }

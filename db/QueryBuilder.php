@@ -50,6 +50,16 @@ class QueryBuilder{
         return $this;
     }
 
+    public function WhereLike($column,$item,$startWildcard =true,$endWildcard = true){
+        if(strpos($column,' like')===false){ //preg_match('/^[\w_-\d]+$/',$column)
+            $column .=  ' like';
+        }
+        $item = ($startWildcard ? '%' : '') . $item . ($endWildcard ? '%' : '');
+        $this->where[] = $column;
+        $this->whereData[] = $item;
+        return $this;
+    }
+
     public function Select($select){
         if(is_array($select)){
             $this->select = $select;
@@ -131,20 +141,38 @@ class QueryBuilder{
     public function Insert(AModel $model){
         $placeholder = $this->preparePlaceholder;
         $data = $model->getDbProperties();
-        $table = $model::GetTable();
         $columns = implode(', ',array_keys($data));
         $values = array_values($data);
         $valueSql = substr(str_repeat("$placeholder, ",count($data)),0,-2);
-        return $this->db->CommandPrepared("INSERT INTO $table ($columns) VALUES ($valueSql)",$values);
+        return $this->db->CommandPrepared("INSERT INTO {$this->from} ($columns) VALUES ($valueSql)",$values);
+    }
+
+    public function InsertModel(AModel $model){
+        return $this->Insert($model);
     }
 
     public function Update(AModel $model){
         $placeholder = $this->preparePlaceholder;
         $data = $model->getDbProperties();
-        $table = $model::GetTable();
         $columns = implode("= $placeholder, ",array_keys($data)).'= '.$placeholder;
         $values = array_values($data);
-        return $this->db->CommandPrepared("UPDATE $table SET $columns ".$this->BuildWhere().$this->BuildOrderBy().$this->BuildLimit(),$values);
+        return $this->db->CommandPrepared(implode(' ',array("UPDATE {$this->from} SET $columns ",$this->BuildWhere(),$this->BuildOrderBy(),$this->BuildLimit())),$values);
+    }
+
+    public function UpdateModel(AModel $model){
+        return $this->WhereModel($model)->Update($model);
+    }
+
+    public function Delete(){
+        return $this->db->CommandPrepared(implode(' ',array("DELETE ",$this->BuildFrom(),$this->BuildWherePrepare(),$this->BuildOrderBy(),$this->BuildLimit())),$this->whereData);
+    }
+
+    public function DeleteModel(AModel $model){
+        return $this->WhereModel($model)->Delete();
+    }
+
+    protected function WhereModel(AModel $model){
+        return $this->Where($model::$_PrimaryKey,$model->{$model::$_PrimaryKey});
     }
 
     //Now getDbProperties from AModel is used
@@ -154,7 +182,7 @@ class QueryBuilder{
         $props = $ref->getProperties(ReflectionProperty::IS_PROTECTED);
         foreach($props as $property){
             $name = $property->getName();
-            if(strpos($name, '_') !== 0 && !in_array($name,$model::$_AutoIncrement))
+            if(strpos($name, '_') !== 0 && !in_array($name,$model::$_PrimaryKey))
                 $dbVars[$name] = $model->{'get'.ucfirst($name)}();
         }
         return $dbVars;

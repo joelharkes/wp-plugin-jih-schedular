@@ -8,6 +8,10 @@
 
 class Date extends DateTime{
 
+//    public function  __construct($dateString){
+//        parent::__construct(strtotime($dateString));
+//    }
+
     public function __toString(){
         return $this->format('Y-m-d');
     }

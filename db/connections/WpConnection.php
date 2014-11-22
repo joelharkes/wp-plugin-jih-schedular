@@ -14,9 +14,10 @@ class WpConnection {
     /** @var \wpdb $connection */
     protected $connection;
 
-    public function __construct(){
+    public function __construct($debug = true){
         global $wpdb;
         $this->connection = $wpdb;
+        $this->connection->show_errors($debug);
     }
 
 

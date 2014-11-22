@@ -14,7 +14,7 @@ use db\AWPModel;
 
 class Event extends AWPModel {
     public static $_Table = 'jih_event';
-    public static $_AutoIncrement=array('id');
+    public static $_PrimaryKey='id';
 
     protected $id;
     protected $scheduleId;
