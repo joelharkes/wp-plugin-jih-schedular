@@ -17,6 +17,8 @@ class Event extends AWPModel {
     public static $_PrimaryKey='id';
 
     protected $id;
+
+    //Todo Refactor to calendarID
     protected $scheduleId;
     /** @var Date $datetime */
     protected $datetime;

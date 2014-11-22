@@ -17,12 +17,14 @@ class AjaxController extends Controller {
 
 
     /**
+     * @param $scheduleId
      * @param Date $date should be start of first day: time: 00:00:00
+     *
      * @return $this
      */
     public function EventsForWeek($scheduleId,$date){
         $date = new Date($date);
-        $this->Json($this->dbContext->Events()->Where('datetime >',$date)->Where('datetime <',$date->CloneAddDays(7))->Execute());
+        $this->Json($this->dbContext->Events()->Where('scheduleId',$scheduleId)->Where('datetime >',$date)->Where('datetime <',$date->CloneAddDays(7))->Execute());
     }
 
     public function EventById($id){
@@ -58,7 +60,8 @@ class AjaxController extends Controller {
 
     public function DeleteCalendar($id){
         if(isAdministrator()){
-            $result = $this->dbContext->Calendars()->Where('id',$id)->Delete();
+            $result = $this->dbContext->Events()->Where('ScheduleId',$id)->Delete();
+            $result += $this->dbContext->Calendars()->Where('id',$id)->Delete();
             $this->JsonResult($result);
         }
         $this->JsonResult('Admin only');

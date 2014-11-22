@@ -1,5 +1,10 @@
-.wp-list-table.selectable td:nth-child(1),
-.wp-list-table.selectable th:nth-child(1){
-    width: 36px;
+
+.right {
+    float: right;
 }
 
+
+.selectable tbody tr:hover td,
+.selectable tbody tr:hover th {
+    background-color: #EEEEEE;
+}

@@ -14,10 +14,11 @@
         </div>
 
         <div class="right">
-            <select name="calendar" id="jih-calendar-choice">
-                <option value="12">TestCalendar</option>
+            <select name="calendar" id="jih-calendar-choice" onchange="ChangeCalendarId($(this).val())" style="width: 200px">
+                {% for calendar in calendars %}
+                    <option value="{{ calendar.id }}" {{ calendar.id==calendarId ? 'selected' }}>{{ calendar.name }}</option>
+                {% endfor %}
             </select>
-
 
         </div>
         <div class="center">
@@ -49,7 +50,7 @@
         {% endfor %}
     </table>
     <div class="entry clearfix">
-        {{ dump(user) }}
+
         <p>This is an example page. It’s different from a blog post because it will stay in one place and will show up
             in your site navigation (in most themes). Most people start with an About page that introduces them to
             potential site visitors. It might say something like this:</p>
@@ -68,16 +69,13 @@
                     <form id="schedular-event-form" class="form-horizontal" role="form" action="/" method="post">
                         <div class="modal-body">
                             <div class="hide">
-                                <input id="jih-calendar-id" type="text" class="form-control" name="scheduleId"
-                                       value="1">
                                 <input id="redirect-url" type="text" class="form-control" name="redirectUrl" value="">
                             </div>
                             <div class="form-group">
                                 <label for="jih-date" class="col-sm-2 control-label">Datetime</label>
 
                                 <div class="col-sm-10">
-                                    <input id="jih-date" type="datetime" class="form-control" name="datetime"
-                                           placeholder="Date">
+                                    <input id="jih-date" type="datetime" class="form-control" name="datetime" placeholder="Date" readonly>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -124,8 +122,4 @@
         </div><!-- /.modal -->
     {% endblock %}
 
-
-    <script>
-        var items = {{ items|json_encode }};
-    </script>
 {% endblock %}

@@ -48,6 +48,9 @@ class JihSchedularController extends Controller {
         $data['dates'] = $dates;
         $data['actionName'] = JIH_CONTROLLER_ACTION_PARAM;
         $data['action'] = 'Week';
+        $data['calendars'] = $this->dbContext->Calendars()->Execute();
+        if(Input::Param('calendarId'))
+            $data['calendarId'] = Input::Param('calendarId');
         WpTwigViewHelper::LoadView('day-view.twig',$data);
     }
 

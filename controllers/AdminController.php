@@ -21,14 +21,18 @@ class AdminController extends Controller{
 
     public static function DoImports(){
         $helper = JihViewHelper::getInstance();
-        $helper->AddCss('css/admin',"plugin");
+        $helper->AddCss('css/admin',"jih-plugin");
+        $helper->AddCss('lib/datetime-picker/jquery.datetimepicker',"jquery-datetime-picker");
 //        $helper->AddJs('lib/jquery-query','jquery-query');
 
         $helper->AddJs('lib/moment-2.8.3/moment','moment');
         $helper->AddJs('lib/jquery-query','jquery-query');
+        $helper->AddJs('lib/datetime-picker/jquery.datetimepicker','jquery-datetime-picker');
         $helper->AddJs('js/util','util');
         $helper->AddJs('js/api','api',array('util'));
         $helper->AddJs('js/admin','admin',array('api'));
+
+
     }
 
     public function  CalendarsAction(){
@@ -43,10 +47,11 @@ class AdminController extends Controller{
         WpTwigViewHelper::LoadView('admin-schedule.twig',$data);
     }
 
-    public function NewCalendarAction(){
+    public function CalendarFormAction(){
         $data=array();
-        WpTwigViewHelper::LoadView('admin-schedule-form.twig',$data);
-        WpTwigViewHelper::getInstance()->TryRender();
+        if($id = \Input::Post('id'))
+            $data['calendar'] = $this->dbContext->Calendars()->Where('id',$id)->Execute();
+        WpTwigViewHelper::LoadView('admin-calendar-form.twig',$data);
     }
 
     public function  EventsAction(){
@@ -60,6 +65,16 @@ class AdminController extends Controller{
         $data['search'] = $search;
         WpTwigViewHelper::LoadView('admin-event-overview.twig',$data);
     }
+
+    public function EventFormAction(){
+        $data=array();
+        $data['calendars'] = $this->dbContext->Calendars()->Execute();
+        if($id = \Input::Post('id'))
+            $data['event'] = $this->dbContext->Events()->Where('id',$id)->Execute();
+        WpTwigViewHelper::LoadView('admin-event-form.twig',$data);
+    }
+
+
 
 //    protected function saveCalendar($data){
 //        $calendar = new Calendar($data);

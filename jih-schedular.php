@@ -61,9 +61,11 @@ if(!is_admin()){
     //ADMIN STUFF
     add_action( 'admin_menu', 'register_admin_menu');
     function register_admin_menu(){
+        //Links to AdminController->[item]Action();
         add_menu_page( 'Jih Schedular', 'Schedular', 'manage_options', 'jih-calendars', 'adminAction','dashicons-calendar' );
         addSubMenu('Events');
-        addSubMenu('NewCalendar');
+        addSubMenu('CalendarForm');
+        addSubMenu('EventForm','Event');
 
     }
 

@@ -7,7 +7,7 @@ jQuery(document).ready(function(){
     _calendarEl = $('#jih-calendar');
     var $eventForm = $('#schedular-event-form');
     $eventModal = $('#jih-plan-hour');
-
+    _calendarId = $.query.get('calendarId') || _calendarId;
     $('tbody td',_calendarEl).click(function(){
         //alert(getDateFromElement(this));
         Log (getDateFromElement(this));
@@ -22,7 +22,9 @@ jQuery(document).ready(function(){
 
     $eventForm.submit(function(e){
         e.preventDefault();
-        api.SaveEvent($eventForm.serializeObject(),onSuccesEventSave);
+        var data = $eventForm.serializeObject();
+        data.scheduleId = _calendarId;
+        api.SaveEvent(data,onSuccesEventSave);
     });
 
     setCalendarOnDate(_date);
@@ -63,7 +65,10 @@ function getDate(){
     return  $.query.get('date') || moment().format('YYYY-MM-DD');
 }
 
-
+function ChangeCalendarId($id){
+    _calendarId = $id;
+    reloadCalendar();
+}
 
 function setCalendarOnDate(date){
     $('thead th',_calendarEl).each(function(i){

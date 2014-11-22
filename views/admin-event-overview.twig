@@ -1,4 +1,4 @@
-<h2>Events <a href="?page=jih-NewEvent" class="add-new-h2">Add New</a>
+<h2>Events <a href="?page=jih-EventForm" class="add-new-h2">Add New</a>
 </h2>
 
 <form id="search-form" method="get" action="">
@@ -14,10 +14,11 @@
         <th style="width: 24px;"><label for="cal-header"></label><input type="checkbox" id="cal-header"></th>
         <th style="width: 48px;">Id</th>
         <th style="width: 48px">CalId</th>
-        <th>Date</th>
+        <th style="width: 124px;">Date</th>
         <th>Name</th>
+        <th>Email</th>
         <th>Description</th>
-        <th style="width: 54px"></th>
+        <th style="width: 124px">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -28,8 +29,11 @@
             <td>{{ event.scheduleId }}</td>
             <td>{{ event.datetime }}</td>
             <td>{{ event.name }}</td>
+            <td>{{ event.email }}</td>
             <td>{{ event.description|escape }}</td>
-            <th><input type="button" onclick="DeleteEvent({{ event.id }})" value="Delete" /></th>
+            <th>
+                <button class="button button-primary" onclick="EditEvent({{ event.id }})">Edit</button>
+                <input class="button" type="button" onclick="DeleteEvent({{ event.id }})" value="Delete" />
         </tr>
 
     {% endfor %}

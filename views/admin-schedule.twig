@@ -1,4 +1,4 @@
-<h2>Calendars <a href="?page=jih-NewCalendar" class="add-new-h2">Add New</a>
+<h2>Calendars <a href="?page=jih-CalendarForm" class="add-new-h2">Add New</a>
 </h2>
 
 <form id="search-form" method="get" action="">
@@ -15,7 +15,7 @@
         <th style="width: 100px;">Id</th>
         <th>Name</th>
         <th>Description</th>
-        <th style="width: 54px"></th>
+        <th style="width: 124px;">Actions</th>
     </tr>
     </thead>
 <tbody>
@@ -25,7 +25,10 @@
     <td>{{ calendar.id }}</td>
     <td>{{ calendar.name }}</td>
     <td>{{ calendar.description|escape }}</td>
-    <th><input type="button" onclick="DeleteCalendar({{ calendar.id }})" value="Delete" /></th>
+    <th>
+        <button class="button button-primary" onclick="EditCalendar({{ calendar.id }})">Edit</button>
+        <input class="button" type="button" onclick="DeleteCalendar({{ calendar.id }})" value="Delete" />
+    </th>
 </tr>
 
 {% endfor %}
