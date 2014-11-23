@@ -40,6 +40,7 @@ class QueryBuilder{
     }
 
 
+
     public function Where($column,$item=null){
         if(strpos($column,'=')===false && strpos($column,'>')===false && strpos($column,'<')===false && strpos($column,' is')===false){ //preg_match('/^[\w_-\d]+$/',$column)
             $column .= $item===null ? ' is' : ' =';
@@ -124,6 +125,9 @@ class QueryBuilder{
 
     }
 
+    /**
+     * @return ResultSet
+     */
     public function Execute(){
         return $this->db->ExecutePrepared($this->BuildPreparedQuery(),$this->whereData);
     }
@@ -159,12 +163,20 @@ class QueryBuilder{
         return $this->db->CommandPrepared(implode(' ',array("UPDATE {$this->from} SET $columns ",$this->BuildWhere(),$this->BuildOrderBy(),$this->BuildLimit())),$values);
     }
 
-    public function UpdateModel(AModel $model){
-        return $this->WhereModel($model)->Update($model);
-    }
+
 
     public function Delete(){
         return $this->db->CommandPrepared(implode(' ',array("DELETE ",$this->BuildFrom(),$this->BuildWherePrepare(),$this->BuildOrderBy(),$this->BuildLimit())),$this->whereData);
+    }
+
+
+    //NOT so abstract FUNCTIONS
+    public function FindById($id){
+        return $this->Where('id',$id)->Execute()->First();
+    }
+
+    public function UpdateModel(AModel $model){
+        return $this->WhereModel($model)->Update($model);
     }
 
     public function DeleteModel(AModel $model){
@@ -172,7 +184,7 @@ class QueryBuilder{
     }
 
     protected function WhereModel(AModel $model){
-        return $this->Where($model::$_PrimaryKey,$model->{$model::$_PrimaryKey});
+        return $this->Where($model::$_PrimaryKey,$model->{'get'.ucfirst($model::$_PrimaryKey)}());
     }
 
     //Now getDbProperties from AModel is used

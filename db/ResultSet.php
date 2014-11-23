@@ -40,4 +40,9 @@ class ResultSet extends ArrayObject {
 //        $this->currentItem->current()[$name];
     }
 
+    //For Twig -> Get Item
+    public function First(){
+        return $this->currentItem->current();
+    }
+
 }

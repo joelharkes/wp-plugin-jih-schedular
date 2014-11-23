@@ -47,6 +47,7 @@
 <script>
     jQuery('#schedular-form').submit(function(e){
         e.preventDefault();
+        tinyMCE.triggerSave();
         var data = jQuery(this).serializeObject();
         api.SaveEvent(data,function(){
             GotoUrl(jQuery.query.set('page','jih-Events'))

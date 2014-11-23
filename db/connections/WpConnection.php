@@ -35,7 +35,7 @@ class WpConnection {
     /**
      * @param string $sql
      * @param array $values
-     * @return array
+     * @return ResultSet
      */
     public function ExecutePrepared($sql,$values){
         $sql = $this->connection->prepare($sql,$values);
@@ -44,7 +44,7 @@ class WpConnection {
 
     /**
      * @param string $sql
-     * @return array
+     * @return ResultSet
      */
     public function Execute($sql){
         return new ResultSet($this->connection->get_results($sql,ARRAY_A));

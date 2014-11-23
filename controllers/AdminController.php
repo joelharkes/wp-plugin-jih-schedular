@@ -36,7 +36,6 @@ class AdminController extends Controller{
     }
 
     public function  CalendarsAction(){
-
         $data = array();
         $cal = $this->dbContext->Calendars();
         if($search = urldecode(\Input::Get('search'))){
@@ -49,8 +48,8 @@ class AdminController extends Controller{
 
     public function CalendarFormAction(){
         $data=array();
-        if($id = \Input::Post('id'))
-            $data['calendar'] = $this->dbContext->Calendars()->Where('id',$id)->Execute();
+        if($id = \Input::Param('id'))
+            $data['calendar'] = $this->dbContext->Calendars()->Where('id',$id)->Execute()->First();
         WpTwigViewHelper::LoadView('admin-calendar-form.twig',$data);
     }
 
@@ -68,8 +67,8 @@ class AdminController extends Controller{
 
     public function EventFormAction(){
         $data=array();
-        $data['calendars'] = $this->dbContext->Calendars()->Execute();
-        if($id = \Input::Post('id'))
+        $data['calendars'] = $this->dbContext->Calendars()->Execute()->First();
+        if($id = \Input::Param('id'))
             $data['event'] = $this->dbContext->Events()->Where('id',$id)->Execute();
         WpTwigViewHelper::LoadView('admin-event-form.twig',$data);
     }

@@ -17,7 +17,7 @@ abstract class AModel {
 
     public static $_Table;
     //Also Used As Primary Key
-    public static $_PrimaryKey=array();
+    public static $_PrimaryKey;
 
     public function __construct(array $data = array()){
         $this->setAttributesSafe($data);

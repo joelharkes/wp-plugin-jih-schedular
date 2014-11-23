@@ -39,7 +39,7 @@ class WpTwigViewHelper extends Singleton {
         $this->addFunction('get_footer');
         $this->addFunction('get_template_part');
         $this->addFunction('get_search_form');
-
+        $this->addFunction('wp_editor');
         $this->templateData['user'] = \wp_get_current_user();
 //        wp_get_current_commenter();
     }
@@ -73,6 +73,7 @@ class WpTwigViewHelper extends Singleton {
     }
 
 }
+
 
 
 

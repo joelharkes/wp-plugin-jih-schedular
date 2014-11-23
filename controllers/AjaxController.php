@@ -36,8 +36,17 @@ class AjaxController extends Controller {
     }
 
     public function SaveEvent($data){
+        if(\Input::Get('id'))
+            $this->EditEvent($data);
         $event = new Event($data);
         $result = $this->dbContext->Events()->Insert($event);
+        $this->JsonResult($result);
+    }
+
+    public function EditEvent($data){
+        $event = new Event($this->dbContext->Events()->FindById(\Input::Get('id')));
+        $event->setAttributes($data);
+        $result = $this->dbContext->Events()->UpdateModel($event);
         $this->JsonResult($result);
     }
 
@@ -46,14 +55,26 @@ class AjaxController extends Controller {
             $result = $this->dbContext->Events()->Where('id',$id)->Delete();
             $this->JsonResult($result);
         }
-        $this->JsonResult('Admin only');
+        $this->JsonResult(false);
     }
 
     public function SaveCalendar($data){
+        if(\Input::Get('id'))
+            $this->EditCalendar($data);
         if(isAdministrator()){
-            $event = new Calendar($data);
-            $result = $this->dbContext->Calendars()->Insert($event);
+            $calendar = new Calendar($data);
+            $result = $this->dbContext->Calendars()->Insert($calendar);
             $this->JsonResult($result,"Calendar Created");
+        }
+        $this->JsonResult(false);
+    }
+
+    public function EditCalendar($data){
+        if(isAdministrator()){
+            $calendar = new Calendar($this->dbContext->Calendars()->FindById(\Input::Get('id')));
+            $calendar->setAttributes($data);
+            $result = $this->dbContext->Calendars()->UpdateModel($calendar);
+            $this->JsonResult($result);
         }
         $this->JsonResult(false);
     }
@@ -64,17 +85,10 @@ class AjaxController extends Controller {
             $result += $this->dbContext->Calendars()->Where('id',$id)->Delete();
             $this->JsonResult($result);
         }
-        $this->JsonResult('Admin only');
+        $this->JsonResult(false);
     }
 
-    public function EditEvent($data){
-        $event = new Event($this->dbContext->Events()->Where('id',$data['id'])->Execute());
-        $event->setAttributes($data);
-        $result = $this->dbContext->Events()->Where('id',$data['id'])->Update($event);
-        $this->JsonResult($result);
-    }
-
-    private function JsonResult($result,$errorMessage="Request was not allowed"){
+    private function JsonResult($result,$errorMessage="Request was not allowed :S"){
         $this->Json($errorMessage,$result ? HttpStatusCode::OK : HttpStatusCode::FORBIDDEN);
     }
 
