@@ -8,6 +8,7 @@
 
 class JihViewHelper extends Singleton {
 
+    public $resourceDirectory = 'resources/';
     public $filePath = null;
     public $viewData = null;
     private $jsPaths = array();
@@ -45,7 +46,7 @@ class JihViewHelper extends Singleton {
      * @throws Exception if file not found
      */
     public function AddJs($fileName,$overwriteFileName=null,array $dependencies = array('jquery')){
-        $path = plugins_url('/'.$fileName.'.js',__FILE__);
+        $path = plugins_url('/'.$this->resourceDirectory.$fileName.'.js',__FILE__);
         $this->jsPaths[] = array($overwriteFileName ?: $fileName,$path,$dependencies);
         if(count($this->jsPaths)<=1){
             add_action( 'wp_enqueue_scripts',  array( __CLASS__, 'GetJS' ) );
@@ -63,7 +64,7 @@ class JihViewHelper extends Singleton {
      * @throws Exception if file not found
      */
     public function AddCss($fileName,$overwriteFileName=null,array $dependencies = array()){
-        $path = plugins_url('/'.$fileName.'.css',__FILE__);
+        $path = plugins_url('/'.$this->resourceDirectory.$fileName.'.css',__FILE__);
         $this->cssPaths[] = array($overwriteFileName ?: $fileName,$path,$dependencies);
         if(count($this->cssPaths)<=1){
             add_action( 'wp_enqueue_scripts',  array( __CLASS__, 'GetCSS' ) );

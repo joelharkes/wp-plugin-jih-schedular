@@ -7,14 +7,18 @@ jQuery(document).ready(function(){
     _calendarEl = $('#jih-calendar');
     var $eventForm = $('#schedular-event-form');
     $eventModal = $('#jih-plan-hour');
+    $infoModal = $('#jih-info-modal');
     _calendarId = $.query.get('calendarId') || _calendarId;
     $('tbody td',_calendarEl).click(function(){
-        //alert(getDateFromElement(this));
-        Log (getDateFromElement(this));
 
-        $('#jih-date').val(getDateFromElement(this).format(_datetimeFormat));
-        $('#redirect-url').val(document.URL);
-        $($eventModal).modal('show');
+        if($(this).hasClass('is-filled')){
+            $($infoModal).modal('show');
+        } else {
+            $('#jih-date').val(getDateFromElement(this).format(_datetimeFormat));
+            $('#redirect-url').val(document.URL);
+            $($eventModal).modal('show');
+        }
+
     });
 
     $('#calendar-header-date').text(_date.format('MMMM'));
@@ -34,7 +38,7 @@ var onSuccesEventSave = function(){
     $eventModal.modal('hide');
     reloadCalendar();
 };
-
+var $infoModal;
 var $eventModal;
 //Initial values
 var _calendarSize = 7;
