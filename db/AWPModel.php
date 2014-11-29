@@ -25,12 +25,12 @@ abstract class AWPModel extends AModel {
         return parent::CreateTableQuery($columnSql).$charset_collate;
     }
 
-    public static function GetTable(){
+    public static function GetPrefixedTable(){
         if(self::$_TablePrefix===null){
             global $wpdb;
             AWPModel::$_TablePrefix = $wpdb->prefix;
         }
-        return AWPModel::$_TablePrefix.parent::GetTable();
+        return AWPModel::$_TablePrefix.parent::GetPrefixedTable();
     }
 }
 

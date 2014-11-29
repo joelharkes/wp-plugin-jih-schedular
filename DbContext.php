@@ -17,6 +17,9 @@ class DbContext {
         return new \db\QueryBuilder(\models\Event::ClassName());
     }
 
+    public function EventViewModels(){
+        return new \db\QueryBuilder(\models\EventViewModel::ClassName());
+    }
     /**
      * @param string $name class name of model
      * @return \db\QueryBuilder querybuilder for module

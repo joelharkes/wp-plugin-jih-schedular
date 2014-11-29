@@ -24,11 +24,11 @@ class AjaxController extends Controller {
      */
     public function EventsForWeek($calendarId,$date){
         $date = new Date($date);
-        $this->Json($this->dbContext->Events()->Where('calendarId',$calendarId)->Where('datetime >',$date)->Where('datetime <',$date->CloneAddDays(7))->Execute());
+        $this->Json($this->dbContext->EventViewModels()->Where('calendarId',$calendarId)->Where('datetime >',$date)->Where('datetime <',$date->CloneAddDays(7))->Execute());
     }
 
     public function EventById($id){
-        $this->Json($this->dbContext->Events()->Where('id',$id)->Execute());
+        $this->Json($this->dbContext->EventViewModels()->Where('id',$id)->Execute());
     }
 
     public function CalendarById($id){
@@ -56,6 +56,15 @@ class AjaxController extends Controller {
             $this->JsonResult($result);
         }
         $this->JsonResult(false);
+    }
+
+    public function DeleteEventWithPin($id,$pin){
+        $event = $this->dbContext->Events()->FindById($id);
+        if($event->pin == $pin)
+            $result = $this->dbContext->Events()->Where('id',$id)->Delete();
+        else
+            $result = false;
+        $this->JsonResult($result);
     }
 
     public function SaveCalendar($data){
@@ -89,7 +98,7 @@ class AjaxController extends Controller {
     }
 
     private function JsonResult($result,$errorMessage="Request was not allowed :S"){
-        $this->Json($errorMessage,$result ? HttpStatusCode::OK : HttpStatusCode::FORBIDDEN);
+        $this->Json($errorMessage,$result === false ? HttpStatusCode::OK : HttpStatusCode::FORBIDDEN);
     }
 
     private function Json($data,$responseCode = HttpStatusCode::OK){

@@ -59,4 +59,92 @@ class Event extends AWPModel {
         $this->datetime = new Date($datetime);
     }
 
+    //GENERATED
+    /**
+     * @return mixed
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId( $id ) {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCalendarId() {
+        return $this->calendarId;
+    }
+
+    /**
+     * @param mixed $calendarId
+     */
+    public function setCalendarId( $calendarId ) {
+        $this->calendarId = $calendarId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName() {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName( $name ) {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail() {
+        return $this->email;
+    }
+
+    /**
+     * @param mixed $email
+     */
+    public function setEmail( $email ) {
+        $this->email = $email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPin() {
+        return $this->pin;
+    }
+
+    /**
+     * @param mixed $pin
+     */
+    public function setPin( $pin ) {
+        $this->pin = $pin;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription() {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription( $description ) {
+        $this->description = $description;
+    }
+
+
+
+
 } 

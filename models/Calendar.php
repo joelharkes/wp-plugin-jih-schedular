@@ -16,6 +16,7 @@ class Calendar extends AWPModel {
     public static $_PrimaryKey='id';
 
     protected $id;
+    /* @var string name */
     protected $name;
     protected $description;
 
@@ -28,4 +29,34 @@ class Calendar extends AWPModel {
             PRIMARY KEY id (id)
 		");
     }
+
+    /**
+     * @return mixed
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId( $id ) {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName() {
+        return $this->name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription() {
+        return $this->description;
+    }
+
+
 }

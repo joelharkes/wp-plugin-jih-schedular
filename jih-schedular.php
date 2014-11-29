@@ -32,7 +32,7 @@ function AutoLoadJihSchedularFiles( $class ) {
 //add_action( 'plugins_loaded', 'InstallPlugin' );
 
 global $jih_version;
-$jih_version = '1.7';
+$jih_version = '1.1';
 //function InstallPlugin() {
     global $jih_version;
     if ( get_site_option( 'jih_schedular_version' ) != $jih_version ) {

@@ -24,10 +24,10 @@ abstract class AModel {
     }
 
     public static function CreateTableQuery($columnSql){
-        return 'CREATE TABLE IF NOT EXISTS ' . static::GetTable() . " ( $columnSql )";
+        return 'CREATE TABLE IF NOT EXISTS ' . static::GetPrefixedTable() . " ( $columnSql )";
     }
 
-    public static function GetTable(){
+    public static function GetPrefixedTable(){
         return static::$_Table;
     }
 

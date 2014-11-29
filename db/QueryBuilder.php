@@ -31,7 +31,7 @@ class QueryBuilder{
 
     public function __construct($model){
         $this->modelName = $model;
-        $this->from = call_user_func($model .'::GetTable');
+        $this->from = call_user_func($model .'::GetPrefixedTable');
 
         //Switch here between databaseConnections :D
         $this->db = new WpConnection();

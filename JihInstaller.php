@@ -18,6 +18,7 @@ class JihInstaller {
         $db = new WpConnection();
         $db->Execute(\models\Calendar::CreateTableQuery());
         $db->Execute(\models\Event::CreateTableQuery());
+        $db->Execute(\models\EventViewModel::CreateTableQuery());
         delete_option( 'jih_schedular_version' );
         add_option( 'jih_schedular_version', $jih_version );
     }
