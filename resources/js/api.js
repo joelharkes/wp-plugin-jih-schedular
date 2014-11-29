@@ -44,7 +44,7 @@ var api = {};
 
         var defaults = {
             type : "POST",
-            url : '/' + location.search,
+            url : document.location.pathname + location.search,
             data : data,
             dataType : 'json',
             success : IsDefined(onSuccess) ? onSuccess : Log,

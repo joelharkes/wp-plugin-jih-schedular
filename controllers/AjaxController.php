@@ -67,7 +67,7 @@ class AjaxController extends Controller {
 
     public function DeleteEventByPin($id,$pin){
         $event = new Event($this->dbContext->Events()->FindById($id));
-        if( !empty($event->getPin()) && $event->getPin() == $pin){
+        if( !empty($pin) && $event->getPin() == $pin){
             $result = $this->dbContext->Events()->Where('id',$id)->Delete();
         }
         else {
@@ -111,9 +111,9 @@ class AjaxController extends Controller {
     }
 
     private function Json($data,$responseCode = HttpStatusCode::OK){
-        http_response_code($responseCode);
+//        http_response_code($responseCode);
         echo json_encode($data);
-        die();
+        die($responseCode);
     }
 
     private function checkCaptcha($data){

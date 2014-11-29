@@ -18,6 +18,7 @@ class ResultSetIterator extends ArrayIterator{
     }
 
     public function __get($name){
-        return $this->current()[$name];
+        $cur = $this->current();
+        return $cur[$name];
     }
 }

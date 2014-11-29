@@ -23,25 +23,37 @@ include(ABSPATH . "wp-includes/pluggable.php");
 //AUTOLOADING CLASSES
 spl_autoload_register( 'AutoLoadJihSchedularFiles' );
 function AutoLoadJihSchedularFiles( $class ) {
-    if ( file_exists ( JIH_PATH . $class . '.php' ) ){
-        include( JIH_PATH . $class . '.php' );
+    $sanitizedClass =  str_replace('\\',DIRECTORY_SEPARATOR,$class);
+//    if(strpos($sanitizedClass,'WpConnection')!==false){
+//        die('Dide class load: Tried to load file: '.JIH_PATH . $sanitizedClass . '.php and it exists?:'.file_exists ( JIH_PATH . $sanitizedClass . '.php' ));
+//    }
+    if ( file_exists ( JIH_PATH . $sanitizedClass . '.php' ) ){
+        include( JIH_PATH . $sanitizedClass . '.php' );
     }
 }
 
 //INSTALL SCRIPT
-//add_action( 'plugins_loaded', 'InstallPlugin' );
+add_action( 'plugins_loaded', 'InstallPlugin' );
 
 global $jih_version;
 $jih_version = '1.1';
-//function InstallPlugin() {
+function InstallPlugin() {
     global $jih_version;
     if ( get_site_option( 'jih_schedular_version' ) != $jih_version ) {
         JihInstaller::Install();
-        JihInstaller::InstallTestDate();
+//        JihInstaller::InstallTestDate();
     }
-//}
+}
 
 //CONTROLLER LOGIC
+if(Input::Post('dataType')=='json'){
+    $controller = new AjaxController();// Save and Edit function Get Array as input
+    if(startsWith(Input::Param('action'),'Save') || startsWith(Input::Param('action'),'Edit')){
+        $controller->{Input::Param('action')}(Input::Param('input'));
+    } else { //Rest gets called as User func array (array is split up as input parameters)
+        call_user_func_array(array($controller,Input::Param('action')),Input::Param('input'));
+    }
+}
 if(!is_admin()){
 
     if(Input::Param(JIH_CONTROLLER_ACTION_PARAM)){
@@ -49,14 +61,7 @@ if(!is_admin()){
         $controller->route(Input::Param(JIH_CONTROLLER_ACTION_PARAM));
     }
 
-    if(Input::Param('dataType')=='json'){
-        $controller = new AjaxController();// Save and Edit function Get Array as input
-        if(startsWith(Input::Param('action'),'Save') || startsWith(Input::Param('action'),'Edit')){
-            $controller->{Input::Param('action')}(Input::Param('input'));
-        } else { //Rest gets called as User func array (array is split up as input parameters)
-            call_user_func_array(array($controller,Input::Param('action')),Input::Param('input'));
-        }
-    }
+
 } else { //If in admin zone
     //ADMIN STUFF
     add_action( 'admin_menu', 'register_admin_menu');

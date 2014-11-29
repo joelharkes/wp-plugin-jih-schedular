@@ -29,7 +29,7 @@ class WpTwigViewHelper extends Singleton {
 
         $loader = new Twig_Loader_Filesystem($viewLocation ?: JIH_PATH.'views');
         $this->twig = new Twig_Environment($loader, array(
-            'cache' => JIH_PATH.'viewscache',
+//            'cache' => JIH_PATH.'viewscache',
             'debug' => $debug
         ));
         if($debug)
