@@ -46,13 +46,13 @@ class JihViewHelper extends Singleton {
      * @throws Exception if file not found
      */
     public function AddJs($fileName,$overwriteFileName=null,array $dependencies = array('jquery')){
-        $path = plugins_url('/'.$this->resourceDirectory.$fileName.'.js',__FILE__);
-        $this->jsPaths[] = array($overwriteFileName ?: $fileName,$path,$dependencies);
+        $path = '/'.$this->resourceDirectory.$fileName.'.js';
+        $this->jsPaths[] = array($overwriteFileName ?: $fileName,plugins_url($path,__FILE__),$dependencies);
         if(count($this->jsPaths)<=1){
             add_action( 'wp_enqueue_scripts',  array( __CLASS__, 'GetJS' ) );
             add_action( 'admin_enqueue_scripts',  array( __CLASS__, 'GetJS' ) );
         }
-        if(!file_exists($path = JIH_PATH.$fileName.'.js')){
+        if(!file_exists($path = JIH_PATH.$path)){
             throw new Exception("File: $path does not exist!");
         }
     }
@@ -64,13 +64,13 @@ class JihViewHelper extends Singleton {
      * @throws Exception if file not found
      */
     public function AddCss($fileName,$overwriteFileName=null,array $dependencies = array()){
-        $path = plugins_url('/'.$this->resourceDirectory.$fileName.'.css',__FILE__);
-        $this->cssPaths[] = array($overwriteFileName ?: $fileName,$path,$dependencies);
+        $path = '/'.$this->resourceDirectory.$fileName.'.css';
+        $this->cssPaths[] = array($overwriteFileName ?: $fileName,plugins_url($path,__FILE__),$dependencies);
         if(count($this->cssPaths)<=1){
             add_action( 'wp_enqueue_scripts',  array( __CLASS__, 'GetCSS' ) );
             add_action( 'admin_enqueue_scripts',  array( __CLASS__, 'GetCSS' ) );
         }
-        if(!file_exists($path = JIH_PATH.$fileName.'.css')){
+        if(!file_exists($path = JIH_PATH.$path)){
             throw new Exception("File: $path does not exist!");
         }
     }
