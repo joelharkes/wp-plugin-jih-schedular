@@ -34,6 +34,7 @@ class JihSchedularController extends Controller {
         $helper->AddJs('js/util','util');
         $helper->AddJs('js/api','api',array('util'));
         $helper->AddJs('js/schedular','schedular',array('api'));
+        $helper->AddJsUrl('https://www.google.com/recaptcha/api.js','google-api',array());
     }
 
     public function WeekAction(){

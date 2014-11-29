@@ -57,6 +57,14 @@ class JihViewHelper extends Singleton {
         }
     }
 
+    public function AddJsUrl($url,$filename,array $dependencies = array('jquery')){
+        $this->jsPaths[] = array($filename,$url,$dependencies);
+        if(count($this->jsPaths)<=1){
+            add_action( 'wp_enqueue_scripts',  array( __CLASS__, 'GetJS' ) );
+            add_action( 'admin_enqueue_scripts',  array( __CLASS__, 'GetJS' ) );
+        }
+    }
+
     /**
      * @param string $fileName filename to be found (exclude .js!)
      * @param array $dependencies to other js files

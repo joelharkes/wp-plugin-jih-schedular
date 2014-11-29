@@ -5,14 +5,20 @@ var $ = jQuery;
 jQuery(document).ready(function(){
     var $ = jQuery;
     _calendarEl = $('#jih-calendar');
-    var $eventForm = $('#schedular-event-form');
     $eventModal = $('#jih-plan-hour');
     $infoModal = $('#jih-info-modal');
     _calendarId = $.query.get('calendarId') || _calendarId;
     $('tbody td',_calendarEl).click(function(){
+        var $this = $(this);
+        if($this.hasClass('is-filled')){
+            $infoModal.modal('show');
+            var event = $this.data('event');
+            $.each(event,function(attr,value){
+                $infoModal.find('div.data-'+attr).text(value);
+                $infoModal.find('input.data-'+attr).val(value);
+                $infoModal.find('input')
+            });
 
-        if($(this).hasClass('is-filled')){
-            $($infoModal).modal('show');
         } else {
             $('#jih-date').val(getDateFromElement(this).format(_datetimeFormat));
             $('#redirect-url').val(document.URL);
@@ -23,12 +29,24 @@ jQuery(document).ready(function(){
 
     $('#calendar-header-date').text(_date.format('MMMM'));
 
-
+    var $eventForm = $('#schedular-event-form');
     $eventForm.submit(function(e){
         e.preventDefault();
         var data = $eventForm.serializeObject();
         data.calendarId = _calendarId;
         api.SaveEvent(data,onSuccesEventSave);
+    });
+
+    var $deleteForm = $('#delete-event-form');
+    $deleteForm.submit(function(e){
+        e.preventDefault();
+        var data = $deleteForm.serializeObject();
+        api.DeleteEventByPin(data,function(){
+            $infoModal.modal('hide');
+            reloadCalendar();
+        },function(){
+            alert('Event not deleted, wrong pincode. (Events without pin cannot be deleted by users)')
+        })
     });
 
     setCalendarOnDate(_date);
@@ -38,6 +56,7 @@ var onSuccesEventSave = function(){
     $eventModal.modal('hide');
     reloadCalendar();
 };
+
 var $infoModal;
 var $eventModal;
 //Initial values
@@ -115,6 +134,7 @@ function saturateCalendar(events){
     $.each( events, function( index, event ) {
         $dateEl = getElementFromDate(moment(event.datetime));
         $dateEl.addClass(filledClass).text(event.name);
+        $dateEl.data('event',event);
     });
 }
 

@@ -18,7 +18,12 @@ var api = {};
     };
 
     api.DeleteEvent = function(id,onSuccess,onError){
-        post('DeleteEvent',id,onSuccess,onError)
+        post('DeleteEvent',{id : id},onSuccess,onError)
+    };
+
+    //Data: Id and Pin
+    api.DeleteEventByPin = function(data,onSuccess,onError){
+        post('DeleteEventByPin',data,onSuccess,onError)
     };
 
     api.SaveCalendar = function(data,onSuccess,onError){
@@ -26,7 +31,7 @@ var api = {};
     };
 
     api.DeleteCalendar = function(id,onSuccess,onError){
-        post('DeleteCalendar',id,onSuccess,onError)
+        post('DeleteCalendar',{id : id},onSuccess,onError)
     };
 
 

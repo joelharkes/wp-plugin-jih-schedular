@@ -50,10 +50,10 @@ if(!is_admin()){
     }
 
     if(Input::Param('dataType')=='json'){
-        $controller = new AjaxController();
-        if(startsWith(Input::Param('action'),'Save') || startsWith(Input::Param('action'),'Edit') || startsWith(Input::Param('action'),'Delete')){
+        $controller = new AjaxController();// Save and Edit function Get Array as input
+        if(startsWith(Input::Param('action'),'Save') || startsWith(Input::Param('action'),'Edit')){
             $controller->{Input::Param('action')}(Input::Param('input'));
-        } else {
+        } else { //Rest gets called as User func array (array is split up as input parameters)
             call_user_func_array(array($controller,Input::Param('action')),Input::Param('input'));
         }
     }

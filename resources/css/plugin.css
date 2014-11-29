@@ -1,3 +1,11 @@
+#jih-calendar td {
+    overflow: auto;
+}
+#jih-calendar td::-webkit-scrollbar {
+    display: none;
+
+}
+
 .table thead th {
     font-weight: bold;
 }

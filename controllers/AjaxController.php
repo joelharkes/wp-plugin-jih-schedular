@@ -36,18 +36,25 @@ class AjaxController extends Controller {
     }
 
     public function SaveEvent($data){
-        if(\Input::Get('id'))
+        if(\Input::Get('id')) //Remote to Edit
             $this->EditEvent($data);
-        $event = new Event($data);
-        $result = $this->dbContext->Events()->Insert($event);
-        $this->JsonResult($result);
+        if(isAdministrator() || $this->checkCaptcha($data)) {
+            $event  = new Event( $data );
+            $result = $this->dbContext->Events()->Insert( $event );
+            $this->JsonResult($result);
+
+        }
+        $this->JsonResult(false);
     }
 
     public function EditEvent($data){
-        $event = new Event($this->dbContext->Events()->FindById(\Input::Get('id')));
-        $event->setAttributes($data);
-        $result = $this->dbContext->Events()->UpdateModel($event);
-        $this->JsonResult($result);
+        if(isAdministrator() || $this->checkCaptcha($data)) {
+            $event = new Event($this->dbContext->Events()->FindById(\Input::Get('id')));
+            $event->setAttributes($data);
+            $result = $this->dbContext->Events()->UpdateModel($event);
+            $this->JsonResult($result);
+        }
+        $this->JsonResult(false);
     }
 
     public function DeleteEvent($id){
@@ -58,12 +65,14 @@ class AjaxController extends Controller {
         $this->JsonResult(false);
     }
 
-    public function DeleteEventWithPin($id,$pin){
-        $event = $this->dbContext->Events()->FindById($id);
-        if($event->pin == $pin)
+    public function DeleteEventByPin($id,$pin){
+        $event = new Event($this->dbContext->Events()->FindById($id));
+        if( !empty($event->getPin()) && $event->getPin() == $pin){
             $result = $this->dbContext->Events()->Where('id',$id)->Delete();
-        else
+        }
+        else {
             $result = false;
+        }
         $this->JsonResult($result);
     }
 
@@ -98,13 +107,23 @@ class AjaxController extends Controller {
     }
 
     private function JsonResult($result,$errorMessage="Request was not allowed :S"){
-        $this->Json($errorMessage,$result === false ? HttpStatusCode::OK : HttpStatusCode::FORBIDDEN);
+        $this->Json($errorMessage,$result !== false ? HttpStatusCode::OK : HttpStatusCode::FORBIDDEN);
     }
 
     private function Json($data,$responseCode = HttpStatusCode::OK){
         http_response_code($responseCode);
         echo json_encode($data);
         die();
+    }
+
+    private function checkCaptcha($data){
+        $captcha = $data['g-recaptcha-response'];
+        $secret = '6Lcw1vsSAAAAAIxl-CW-cIUhxPwO96EZspyzIUJh';
+        $remoteIp = $_SERVER['REMOTE_ADDR'];
+        $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$captcha&remoteip=$remoteIp";
+        $response = file_get_contents($url);
+        $answers = json_decode($response, true);
+        return $answers['success'] == true;
     }
 }
 
