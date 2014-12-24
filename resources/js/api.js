@@ -42,13 +42,23 @@ var api = {};
             input : input
         };
 
+        var successHandle = IsDefined(onSuccess) ? onSuccess : Log;
+        var errorHandle = IsDefined(onError) ? onError : DefaultOnErrorHandling;
+        var CheckPostSuccess = function(result,textStatus,thrownError){
+            if(result['result']==200){
+                successHandle(result['response'],textStatus,thrownError);
+            } else {
+                errorHandle(result['response'],textStatus,thrownError);
+            }
+        };
+
         var defaults = {
             type : "POST",
             url : document.location.pathname + location.search,
             data : data,
             dataType : 'json',
-            success : IsDefined(onSuccess) ? onSuccess : Log,
-            error : IsDefined(onError) ? onError : DefaultOnErrorHandling,
+            success : CheckPostSuccess,
+            error : errorHandle,
             statusCode: {
                 404: function() {
                     alert( "page not found" );

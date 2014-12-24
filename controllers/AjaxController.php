@@ -42,7 +42,6 @@ class AjaxController extends Controller {
             $event  = new Event( $data );
             $result = $this->dbContext->Events()->Insert( $event );
             $this->JsonResult($result);
-
         }
         $this->JsonResult(false);
     }
@@ -112,6 +111,7 @@ class AjaxController extends Controller {
 
     private function Json($data,$responseCode = HttpStatusCode::OK){
 //        http_response_code($responseCode);
+        $data = array('result'=>$responseCode,'response'=> $data);
         echo json_encode($data);
         die($responseCode);
     }

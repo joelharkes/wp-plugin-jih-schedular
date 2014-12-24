@@ -29,7 +29,8 @@ class JihSchedularController extends Controller {
 //
         $helper->AddJs('lib/bootstrap-3.2.0/js/bootstrap','bootstrap');
         $helper->AddJs('lib/jquery-query','jquery-query');
-        $helper->AddJs('lib/moment-2.8.3/moment','moment');
+        $helper->AddJs('lib/moment-2.8.3/moment-with-locales','moment');
+        $helper->AddJs('lib/jquery.cookie','cookie');
 
         $helper->AddJs('js/util','util');
         $helper->AddJs('js/api','api',array('util'));
@@ -50,8 +51,14 @@ class JihSchedularController extends Controller {
         $data['actionName'] = JIH_CONTROLLER_ACTION_PARAM;
         $data['action'] = 'Week';
         $data['calendars'] = $this->dbContext->Calendars()->Execute();
-        if(Input::Param('calendarId'))
+
+        if(Input::Param('calendarId')){
+            $data['calendar'] = $this->dbContext->Calendars()->FindById(Input::Cookie('calendarId'));
             $data['calendarId'] = Input::Param('calendarId');
+        } else {
+            $data['calendar'] = $this->dbContext->Calendars()->First();
+        }
+
         WpTwigViewHelper::LoadView('day-view.twig',$data);
     }
 

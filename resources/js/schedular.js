@@ -1,7 +1,10 @@
 /**
  * Created by Joel on 11-Oct-14.
  */
+
 var $ = jQuery;
+moment.locale('nl');
+
 jQuery(document).ready(function(){
     var $ = jQuery;
     _calendarEl = $('#jih-calendar');
@@ -27,7 +30,7 @@ jQuery(document).ready(function(){
 
     });
 
-    $('#calendar-header-date').text(_date.format('MMMM'));
+
 
     var $eventForm = $('#schedular-event-form');
     $eventForm.submit(function(e){
@@ -91,15 +94,17 @@ function getDate(){
 function ChangeCalendarId($id){
     _calendarId = $id;
     reloadCalendar();
+    $.cookie('calendarId',$id);
 }
 
 function setCalendarOnDate(date){
     $('thead th',_calendarEl).each(function(i){
         if(i>0){
-            $(this).text(CurDate().add(i-1,'days').format(_dateFormat));
+            $(this).html(CurDate().add(i-1,'days').format('dddd<br>DD MMM'));
         }
     });
     _date = date;
+    $('#calendar-header-date').html(_date.format('MMMM YYYY'));
     loadCalendarEvents(date);
 }
 
@@ -119,7 +124,7 @@ function getElementFromDate(date){
 
 function reloadCalendar(){
     setCalendarOnDate(_date);
-    loadCalendarEvents(_date);
+    //loadCalendarEvents(_date);
 }
 
 function loadCalendarEvents(date){

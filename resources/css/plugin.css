@@ -1,3 +1,8 @@
+/* Plugin Stuff */
+.schedular-header {
+    padding: 10px 10px;
+}
+
 #jih-calendar td {
     overflow: auto;
 }
@@ -14,14 +19,13 @@
     text-align: right;
 }
 
-table.table tbody > tr:nth-child(odd) > th {
-    background-color: #CCC;
-}
+/*table.table tbody > tr:nth-child(odd) > th {*/
+    /*background-color: #CCC;*/
+/*}*/
+/*table.table tbody > tr:nth-child(even) > th {*/
+    /*background-color: #FFF;*/
+/*}*/
 
-/*somehow unused*/
-table.table tbody > tr:nth-child(even) > th {
-    background-color: #FFF;
-}
 table.table tbody tr td:hover {
     background-color: #AAA;
 }
@@ -41,22 +45,7 @@ table.table tbody tr td.is-filled {
 }
 
 
-/* for minezine */
-/** {*/
-    /*-webkit-box-sizing: content-box !important;*/
-    /*-moz-box-sizing: content-box !important;;*/
-    /*box-sizing: content-box !important;;*/
-/*}*/
-
-#container .header-content,
-#wrapper #container #main-content,
-#footer,
-#header .menu-box,
-#main-content{
-    width: 100%; !important;
-
-}
-
+/* UTIL STUFF */
 .left {
     float: left;
 }
@@ -70,15 +59,39 @@ table.table tbody tr td.is-filled {
     text-align: center;
 }
 
-#searchform .searchform-wrapper #s {
-    height: 31px !important;
+/* THEME Mine ZINE */
+/*#searchform .searchform-wrapper #s {*/
+    /*height: 31px !important;*/
 
+/*}*/
+
+/*.form-control {*/
+    /*background-color: #fff !important;*/
+    /*border: 1px solid #ccc !important;*/
+    /*width: 100%  !important;*/
+    /*padding: 6px 12px  !important;*/
+    /*font-size: 14px  !important;*/
+/*}*/
+
+/*#container .header-content,*/
+/*#wrapper #container #main-content,*/
+/*#footer,*/
+/*#header .menu-box,*/
+/*#main-content{*/
+    /*width: 100%; !important;*/
+
+/*}*/
+
+/* THEME Sparkling fix */
+
+.modal-dialog {
+    z-index: 1050;
+}
+.modal-footer > button[type=submit] {
+    display: inline-block;
 }
 
-.form-control {
-    background-color: #fff !important;
-    border: 1px solid #ccc !important;
-    width: 100%  !important;
-    padding: 6px 12px  !important;
-    font-size: 14px  !important;
+#jih-calendar th,
+#jih-calendar td {
+    font-size: 12px;
 }
