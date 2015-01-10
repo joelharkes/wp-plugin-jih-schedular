@@ -12,6 +12,7 @@ jQuery(document).ready(function(){
     $infoModal = $('#jih-info-modal');
     _calendarId = $.query.get('calendarId') || $.cookie('calendarId') || _calendarId;
     $('#jih-calendar-choice').val(_calendarId);
+    $('.setCalendarName').text($("option:selected",'#jih-calendar-choice').text());
     $('tbody td',_calendarEl).click(function(){
         var $this = $(this);
         if($this.hasClass('is-filled')){
@@ -101,6 +102,7 @@ function ChangeCalendarId($id){
     _calendarId = $id;
     reloadCalendar();
     $.cookie('calendarId',$id);
+    $('.setCalendarName').text($("option:selected",'#jih-calendar-choice').text());
 }
 
 function setCalendarOnDate(date){

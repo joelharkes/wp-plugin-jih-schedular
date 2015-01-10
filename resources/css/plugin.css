@@ -12,7 +12,8 @@
 }
 
 #jih-calendar td.inThePast {
-    background-color: #bebebe;
+    background-color: rgba(202, 202, 202, 0.38);
+
 }
 
 .table thead th {
