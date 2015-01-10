@@ -10,7 +10,8 @@ jQuery(document).ready(function(){
     _calendarEl = $('#jih-calendar');
     $eventModal = $('#jih-plan-hour');
     $infoModal = $('#jih-info-modal');
-    _calendarId = $.query.get('calendarId') || _calendarId;
+    _calendarId = $.query.get('calendarId') || $.cookie('calendarId') || _calendarId;
+    $('#jih-calendar-choice').val(_calendarId);
     $('tbody td',_calendarEl).click(function(){
         var $this = $(this);
         if($this.hasClass('is-filled')){
@@ -66,7 +67,7 @@ var $eventModal;
 var _calendarSize = 7;
 var _calendarId = 1;
 var _calendarEl = null;
-var _date = moment().startOf('day');
+var _date = ThisWeek();
 var CurDate = function(){
     return _date.clone();
 };
@@ -75,16 +76,21 @@ var _datetimeFormat = 'YYYY-MM-DD HH:mm:ss';
 
 //END Initial values
 
-function gotoNextWeek(){
+function gotoWeekAfter(){
     setCalendarOnDate(CurDate().add(7,'days'));
 }
 
-function gotoLastWeek(){
+function gotoWeekBefore(){
     setCalendarOnDate(CurDate().subtract(7,'days'));
 }
-
+function gotoDayBefore(){
+    setCalendarOnDate(CurDate().subtract(1,'days'));
+}
+function gotoDayAfter(){
+    setCalendarOnDate(CurDate().add(1,'days'));
+}
 function gotoToday(){
-    setCalendarOnDate(Today());
+    setCalendarOnDate(ThisWeek());
 }
 
 function getDate(){
@@ -98,14 +104,24 @@ function ChangeCalendarId($id){
 }
 
 function setCalendarOnDate(date){
+    _date = date;
     $('thead th',_calendarEl).each(function(i){
         if(i>0){
             $(this).html(CurDate().add(i-1,'days').format('dddd<br>DD MMM'));
         }
     });
-    _date = date;
     $('#calendar-header-date').html(_date.format('MMMM YYYY'));
     loadCalendarEvents(date);
+
+    //Add in the past class
+    var hourDiff = moment.duration(moment().diff(_date)).asHours();
+    var cells = $('td',_calendarEl).removeClass('inThePast');
+    var $i = 0;
+    while (hourDiff > $i && $i <= 24*7){
+        cells.eq(Math.floor($i/24)+$i%24*7).addClass('inThePast')
+        $i++;
+    }
+    //$('td',_calendarEl).removeClass('inThePast').slice(0,hourDiff).addClass('inThePast');
 }
 
 function getDateFromElement(el){
@@ -146,3 +162,20 @@ function saturateCalendar(events){
 function emptyCalendar(){
     $('.'+filledClass,_calendarEl).removeClass(filledClass).text('');
 }
+
+//HOTKEYS
+
+$(document).keyup(function(e){
+    if(e.which==37){
+        if(e.ctrlKey)
+            gotoWeekBefore();
+        else
+            gotoDayBefore();
+    }
+    if(e.which==39){
+        if(e.ctrlKey)
+            gotoWeekAfter();
+        else
+            gotoDayAfter();
+    }
+})

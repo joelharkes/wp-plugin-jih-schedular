@@ -11,12 +11,35 @@
 
 }
 
+#jih-calendar td.inThePast {
+    background-color: #bebebe;
+}
+
 .table thead th {
     font-weight: bold;
+    min-width: 83px;
 }
 
 .table tbody th {
     text-align: right;
+}
+@media screen and (max-width: 500px) {
+    #jih-calendar tr th:nth-child(6),
+    #jih-calendar tr td:nth-child(6){
+        display:none;
+    }
+}
+@media screen and (max-width: 600px) {
+    #jih-calendar tr th:nth-child(7),
+    #jih-calendar tr td:nth-child(7){
+        display:none;
+    }
+}
+@media screen and (max-width: 700px) {
+    #jih-calendar tr th:nth-child(8),
+    #jih-calendar tr td:nth-child(8){
+        display:none;
+    }
 }
 
 /*table.table tbody > tr:nth-child(odd) > th {*/
