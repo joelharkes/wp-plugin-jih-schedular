@@ -9,22 +9,24 @@
     </script>
 
     <div class="content-headline">
-        <h1 class="entry-headline"><span class="entry-headline-text">Gebed - {{ calendar.name }}</span></h1>
+        <h1 class="entry-headline"><span class="entry-headline-text">Gebed - <span class="setCalendarName"></span></span></h1>
     </div>
 
     <div class="schedular-header row">
-        <div class="col-md-4">
-            <a onclick="gotoLastWeek()" class="btn">&lt;</a>
+        <div class="col-md-5">
+            <a onclick="gotoWeekBefore()" class="btn">&lt;&lt;</a>
+            <a onclick="gotoDayBefore()" class="btn">&lt;</a>
             <a onclick="gotoToday()" class="btn">Vandaag</a>
-            <a onclick="gotoNextWeek()" class="btn">&gt;</a>
+            <a onclick="gotoDayAfter()" class="btn">&gt;</a>
+            <a onclick="gotoWeekAfter()" class="btn">&gt;&gt;</a>
         </div>
-        <div class="col-md-4">
-            <h3 id="calendar-header-date" style="margin: 4px 0 0 0;text-align: center;"></h3>
+        <div class="col-md-3">
+            <h3 id="calendar-header-date" style="margin: 4px 0 8px 0;"></h3>
         </div>
         <div class="col-md-4">
             <select name="calendar" class="form-control" id="jih-calendar-choice" onchange="ChangeCalendarId($(this).val())" style="">
                 {% for calendar in calendars %}
-                    <option value="{{ calendar.id }}" {{ calendar.id==calendarId ? 'selected' }}>{{ calendar.name }}</option>
+                    <option value="{{ calendar.id }}">{{ calendar.name }}</option>
                 {% endfor %}
             </select>
 

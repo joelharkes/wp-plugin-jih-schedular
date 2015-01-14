@@ -38,4 +38,11 @@ class Date extends DateTime{
     public function DbStartOfDay(){
         return $this->format("Y-m-d 00:00:00");
     }
+
+    function FirstDayOfWeek($firstDay = 0) {
+        $offset = 7 - $firstDay;
+        $firstDayDate = clone $this;
+        $firstDayDate->modify(-(($this->format('w') + $offset) % 7) . ' days');
+        return $firstDayDate;
+    }
 } 
