@@ -5,45 +5,44 @@ var api = {};
 (function($) {
     var _datetimeFormat = 'YYYY-MM-DD HH:mm:ss';
 
-    api.EventById = function(id,onSuccess,onError){
-        post('EventById',{id : id},onSuccess,onError)
+    api.EventById = function(id,onSuccess,onError, sync){
+        return post('EventById',{id : id},onSuccess,onError, sync)
     };
 
-    api.EventsForWeek = function(calendarId, date,onSuccess,onError){
-        post('EventsForWeek',{calendarId : calendarId, date : date.format(_datetimeFormat)},onSuccess,onError)
+    api.EventsForWeek = function(calendarId, date,onSuccess,onError, sync){
+        return post('EventsForWeek',{calendarId : calendarId, date : date.format(_datetimeFormat)},onSuccess,onError, sync)
     };
 
-    api.SaveEvent = function(data,onSuccess,onError){
-        post('SaveEvent',data,onSuccess,onError)
+    api.SaveEvent = function(data,onSuccess,onError, sync){
+        return post('SaveEvent',data,onSuccess,onError, sync)
     };
 
-    api.DeleteEvent = function(id,onSuccess,onError){
-        post('DeleteEvent',{id : id},onSuccess,onError)
+    api.DeleteEvent = function(id,onSuccess,onError, sync){
+        return post('DeleteEvent',{id : id},onSuccess,onError, sync)
     };
 
     //Data: Id and Pin
-    api.DeleteEventByPin = function(data,onSuccess,onError){
-        post('DeleteEventByPin',data,onSuccess,onError)
+    api.DeleteEventByPin = function(data,onSuccess,onError, sync){
+        return post('DeleteEventByPin',data,onSuccess,onError, sync)
     };
 
-    api.SaveCalendar = function(data,onSuccess,onError){
-        post('SaveCalendar',data,onSuccess,onError)
+    api.SaveCalendar = function(data,onSuccess,onError, sync){
+        return post('SaveCalendar',data,onSuccess,onError, sync)
     };
 
-    api.DeleteCalendar = function(id,onSuccess,onError){
-        post('DeleteCalendar',{id : id},onSuccess,onError)
+    api.DeleteCalendar = function(id,onSuccess,onError, sync){
+        return post('DeleteCalendar',{id : id},onSuccess,onError, sync)
     };
 
 
-    var post = function(action,input,onSuccess, onError, options){
+    var post = function(action,input,onSuccess, onError, sync, options){
         var data = {
             action : action,
             dataType : 'json',
             input : input
         };
-
-        var successHandle = IsDefined(onSuccess) ? onSuccess : Log;
-        var errorHandle = IsDefined(onError) ? onError : DefaultOnErrorHandling;
+        var successHandle = !onSuccess ? Log : onSuccess;
+        var errorHandle = !onError ? DefaultOnErrorHandling : onError;
         var CheckPostSuccess = function(result,textStatus,thrownError){
             if(result['result']==200){
                 successHandle(result['response'],textStatus,thrownError);
@@ -64,12 +63,13 @@ var api = {};
                     alert( "page not found" );
                 },
                 401: GotoLoginPage
-            }
+            },
+            async: !sync
         };
         if(!IsEmpty(options)){
             defaults = $.extend(true, defaults, options);
         }
-        $.ajax(defaults);
+        return $.ajax(defaults);
     };
 
     var DefaultOnErrorHandling = function(result,textStatus,thrownError){

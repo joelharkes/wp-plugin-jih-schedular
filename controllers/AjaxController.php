@@ -24,7 +24,7 @@ class AjaxController extends Controller {
      */
     public function EventsForWeek($calendarId,$date){
         $date = new Date($date);
-        $this->Json($this->dbContext->EventViewModels()->Where('calendarId',$calendarId)->Where('datetime >',$date)->Where('datetime <',$date->CloneAddDays(7))->Execute());
+        $this->Json($this->dbContext->EventViewModels()->Where('calendarId',$calendarId)->Where('datetime >=',$date)->Where('datetime <',$date->CloneAddDays(7))->Execute());
     }
 
     public function EventById($id){
@@ -38,6 +38,11 @@ class AjaxController extends Controller {
     public function SaveEvent($data){
         if(\Input::Get('id')) //Remote to Edit
             $this->EditEvent($data);
+
+        if($this->dbContext->Events()->Where('datetime',$data['datetime'])->Any()){
+            $this->JsonResult(false,"DuplicateEvent");
+        }
+
         $user = \wp_get_current_user();
         if($user != null){
             $event  = new Event( $data );
@@ -46,12 +51,14 @@ class AjaxController extends Controller {
             $event->setUserId($user->ID);
             $result = $this->dbContext->Events()->Insert( $event );
             $this->JsonResult($result);
+            return;
         }
 
         if(isAdministrator() || $this->checkCaptcha($data)) {
             $event  = new Event( $data );
             $result = $this->dbContext->Events()->Insert( $event );
             $this->JsonResult($result);
+            return;
         }
         $this->JsonResult(false);
     }

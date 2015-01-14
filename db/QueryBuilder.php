@@ -139,7 +139,13 @@ class QueryBuilder{
     public function First(){
         $this->limit(1);
         return $this->Execute();
+    }
 
+    /**
+     * @return bool if any results return from query
+     */
+    public function Any(){
+        return $this->First()->Any();
     }
 
     public function Insert(AModel $model){

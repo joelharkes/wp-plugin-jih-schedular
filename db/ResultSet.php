@@ -45,4 +45,8 @@ class ResultSet extends ArrayObject {
         return $this->currentItem->current();
     }
 
+    public function Any(){
+        return $this->count() > 0;
+    }
+
 }

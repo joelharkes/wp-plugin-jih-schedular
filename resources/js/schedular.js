@@ -39,14 +39,23 @@ jQuery(document).ready(function(){
 
     });
 
-
-
     var $eventForm = $('#schedular-event-form');
     $eventForm.submit(function(e){
         e.preventDefault();
         var data = $eventForm.serializeObject();
         data.calendarId = _calendarId;
-        api.SaveEvent(data,onSuccesEventSave);
+        if(data.repeat){
+            $('.repeatEventCheckbox').click();
+            var iteration = 0;
+            while(data.repeatQuantity >= iteration){
+                api.SaveEvent(data,false,false,true);
+                data.datetime = moment(data.datetime).add(1,data.repeatPeriod).format(_datetimeFormat);
+                iteration++;
+            }
+            onSuccesEventSave();
+        } else {
+            api.SaveEvent(data,onSuccesEventSave);
+        }
     });
 
     var $deleteForm = $('#delete-event-form');
@@ -68,6 +77,13 @@ jQuery(document).ready(function(){
         }
 
     });
+
+    //Repeat behaviour
+    $('.repeatEventCheckbox').click(function(){
+       $(this).next().toggle();
+    });
+
+
 
     setCalendarOnDate(_date);
 });
@@ -162,10 +178,12 @@ function reloadCalendar(){
     setCalendarOnDate(_date);
     //loadCalendarEvents(_date);
 }
-
+var lastCalendarCall = null;
 function loadCalendarEvents(date){
     emptyCalendar();
-    api.EventsForWeek(_calendarId,date,saturateCalendar);
+    if(lastCalendarCall)
+        lastCalendarCall.abort();
+    lastCalendarCall = api.EventsForWeek(_calendarId,date,saturateCalendar); //,false synchronious call against spamming server --TODO buid in caching
 }
 
 
@@ -186,16 +204,15 @@ function emptyCalendar(){
 //HOTKEYS
 
 $(document).keyup(function(e){
+    var period = "day";
+    if(e.shiftKey)
+        period = "week";
+    if(e.ctrlKey)
+        period = "month";
     if(e.which==37){
-        if(e.ctrlKey)
-            gotoWeekBefore();
-        else
-            gotoDayBefore();
+        setCalendarOnDate(CurDate().subtract(1,period));
     }
     if(e.which==39){
-        if(e.ctrlKey)
-            gotoWeekAfter();
-        else
-            gotoDayAfter();
+        setCalendarOnDate(CurDate().add(1,period));
     }
-})
+});
