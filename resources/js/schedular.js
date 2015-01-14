@@ -19,7 +19,14 @@ jQuery(document).ready(function(){
             $.each(event,function(attr,value){
                 $infoModal.find('div.data-'+attr).text(value);
                 $infoModal.find('input.data-'+attr).val(value);
-                $infoModal.find('input')
+                //$infoModal.find('input')
+                if(isLoggedIn()){
+                    if(event.userId != _userId)
+                        $('#deleteEventButton').prop( "disabled", true );
+                    else
+                        $('#deleteEventButton').prop( "disabled", false );
+                }
+
             });
 
         } else {
@@ -44,12 +51,20 @@ jQuery(document).ready(function(){
     $deleteForm.submit(function(e){
         e.preventDefault();
         var data = $deleteForm.serializeObject();
-        api.DeleteEventByPin(data,function(){
+        var onSuccess = function(){
             $infoModal.modal('hide');
             reloadCalendar();
-        },function(){
-            alert('Event not deleted, wrong pincode. (Events without pin cannot be deleted by users)')
-        })
+        };
+        if(isLoggedIn()){
+            api.DeleteEvent(data.id,onSuccess,function(){
+                alert('Event not deleted, it was not made on this account')
+            })
+        } else {
+            api.DeleteEventByPin(data,onSuccess,function(){
+                alert('Event not deleted, wrong pincode. (Events without pin cannot be deleted by users)')
+            })
+        }
+
     });
 
     setCalendarOnDate(_date);
@@ -72,7 +87,10 @@ var CurDate = function(){
 };
 var _dateFormat = 'YYYY-MM-DD';
 var _datetimeFormat = 'YYYY-MM-DD HH:mm:ss';
-
+var _userId = 0;
+function isLoggedIn(){
+    return _userId != 0;
+}
 //END Initial values
 
 function gotoNextWeek(){

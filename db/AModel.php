@@ -24,7 +24,8 @@ abstract class AModel {
     }
 
     public static function CreateTableQuery($columnSql){
-        return 'CREATE TABLE IF NOT EXISTS ' . static::GetPrefixedTable() . " ( $columnSql )";
+        $tableName = static::GetPrefixedTable();
+        return"CREATE TABLE IF NOT EXISTS $tableName ( $columnSql )";
     }
 
     public static function GetPrefixedTable(){

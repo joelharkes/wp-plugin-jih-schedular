@@ -24,6 +24,7 @@ class Event extends AWPModel {
     protected $email;
     protected $pin;
     protected $description;
+    protected $userId;
 
 
     public static function CreateTableQuery()
@@ -36,6 +37,7 @@ class Event extends AWPModel {
             email VARCHAR (100) NULL,
             pin VARCHAR(4) NULL,
             description text  NULL,
+            userId int NULL,
             PRIMARY KEY (id),
             UNIQUE KEY `calendar_date` (`calendarId`,`datetime`)
 		");

@@ -46,7 +46,7 @@ class JihSchedularController extends Controller {
         while(count($dates)<7){
             $dates[] = clone $date->addDay();
         }
-        $data['records'] = $this->dbContext->Events()->Where('datetime >=',$startDate->DbStartOfDay())->Where('datetime <=',$date->DbEndOfDay());
+//        $data['records'] = $this->dbContext->Events()->Where('datetime >=',$startDate->DbStartOfDay())->Where('datetime <=',$date->DbEndOfDay());
         $data['dates'] = $dates;
         $data['actionName'] = JIH_CONTROLLER_ACTION_PARAM;
         $data['action'] = 'Week';

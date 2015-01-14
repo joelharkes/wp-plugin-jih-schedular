@@ -38,6 +38,16 @@ class AjaxController extends Controller {
     public function SaveEvent($data){
         if(\Input::Get('id')) //Remote to Edit
             $this->EditEvent($data);
+        $user = \wp_get_current_user();
+        if($user != null){
+            $event  = new Event( $data );
+            $event->setEmail($user->user_email);
+            $event->setName($user->user_login);
+            $event->setUserId($user->ID);
+            $result = $this->dbContext->Events()->Insert( $event );
+            $this->JsonResult($result);
+        }
+
         if(isAdministrator() || $this->checkCaptcha($data)) {
             $event  = new Event( $data );
             $result = $this->dbContext->Events()->Insert( $event );
@@ -60,6 +70,16 @@ class AjaxController extends Controller {
         if(isAdministrator()){
             $result = $this->dbContext->Events()->Where('id',$id)->Delete();
             $this->JsonResult($result);
+        }
+        $user = \wp_get_current_user();
+        if ($user!=null){
+            $eventUserId = $this->dbContext->Events()->Where('id',$id)->First()->userId;
+            if($user->ID == $eventUserId){
+                $result = $this->dbContext->Events()->Where('id',$id)->Delete();
+                $this->JsonResult($result);
+            } else {
+                $this->JsonResult(false,"Not your event");
+            }
         }
         $this->JsonResult(false);
     }

@@ -23,12 +23,13 @@ class EventViewModel extends AWPModel {
 	protected $name;
 	protected $email;
 	protected $description;
+	protected $userId;
 
 	public static function CreateTableQuery()
 	{
 		$viewName = static::GetPrefixedTable();
 		$eventTable = Event::GetPrefixedTable();
-		return "CREATE VIEW $viewName AS SELECT id,calendarId,datetime,name,email,description FROM $eventTable";
+		return "CREATE VIEW IF NOT EXISTS $viewName AS SELECT id,calendarId,datetime,name,email,description,userId FROM $eventTable";
 	}
 
 
