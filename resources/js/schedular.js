@@ -31,7 +31,7 @@ jQuery(document).ready(function(){
 
             });
 
-        } else {
+        } else if(!$this.hasClass('inThePast')) {
             $('#jih-date').val(getDateFromElement(this).format(_datetimeFormat));
             $('#redirect-url').val(document.URL);
             $($eventModal).modal('show');

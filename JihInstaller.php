@@ -18,17 +18,31 @@ class JihInstaller {
         $db = new WpConnection();
         $db->Execute(\models\Calendar::CreateTableQuery());
         $db->Execute(\models\Event::CreateTableQuery());
+
+        //View always drop views first
+        $table = models\EventViewModel::GetPrefixedTable();
+        $db->Execute("DROP VIEW IF EXISTS $table;");
         $db->Execute(\models\EventViewModel::CreateTableQuery());
+
         delete_option( 'jih_schedular_version' );
         add_option( 'jih_schedular_version', $jih_version );
     }
-
 
     public static function InstallTestDate() {
         $db = new DbContext();
         $cal = new \models\Calendar();
         $cal->setName("Test Calendar");
         $db->Calendars()->Insert($cal);
+    }
+
+    public static function DropEverything(){
+        $db = new WpConnection();
+        foreach(array(\models\Calendar::GetPrefixedTable(),\models\Event::GetPrefixedTable()) as $table){
+            $db->Execute("DROP TABLE IF EXISTS $table;");
+        }
+        foreach(array(\models\EventViewModel::GetPrefixedTable()) as $table){
+            $db->Execute("DROP VIEW IF EXISTS $table;");
+        }
     }
 
 } 
