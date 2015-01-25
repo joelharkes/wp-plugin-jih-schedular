@@ -28,7 +28,7 @@ function GotoUrl($url){
 
 /* DATE FUNCTIONS*/
 function ThisWeek(){
-    return moment().startOf('week').subtract(1,'day');
+    return moment().day(0);
 }
 
 

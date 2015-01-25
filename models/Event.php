@@ -63,90 +63,104 @@ class Event extends AWPModel {
 
     //GENERATED
     /**
-     * @return mixed
+     * @return int
      */
     public function getId() {
         return $this->id;
     }
 
     /**
-     * @param mixed $id
+     * @param int $id
      */
     public function setId( $id ) {
         $this->id = $id;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getCalendarId() {
         return $this->calendarId;
     }
 
     /**
-     * @param mixed $calendarId
+     * @param int $calendarId
      */
     public function setCalendarId( $calendarId ) {
         $this->calendarId = $calendarId;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName() {
         return $this->name;
     }
 
     /**
-     * @param mixed $name
+     * @param string $name
      */
     public function setName( $name ) {
         $this->name = $name;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getEmail() {
         return $this->email;
     }
 
     /**
-     * @param mixed $email
+     * @param string $email
      */
     public function setEmail( $email ) {
         $this->email = $email;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPin() {
         return $this->pin;
     }
 
     /**
-     * @param mixed $pin
+     * @param string $pin
      */
     public function setPin( $pin ) {
         $this->pin = $pin;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getDescription() {
         return $this->description;
     }
 
     /**
-     * @param mixed $description
+     * @param string $description
      */
     public function setDescription( $description ) {
         $this->description = $description;
     }
 
+    /**
+     * @return int
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
 
+    /**
+     * @param int $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+    }
 
 
 } 

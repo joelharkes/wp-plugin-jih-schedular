@@ -39,7 +39,7 @@ class Date extends DateTime{
         return $this->format("Y-m-d 00:00:00");
     }
 
-    function FirstDayOfWeek($firstDay = 0) {
+    function FirstDayOfWeek($firstDay = 7) {
         $offset = 7 - $firstDay;
         $firstDayDate = clone $this;
         $firstDayDate->modify(-(($this->format('w') + $offset) % 7) . ' days');

@@ -42,26 +42,24 @@ var api = {};
             input : input
         };
         var successHandle = !onSuccess ? Log : onSuccess;
-        var errorHandle = !onError ? DefaultOnErrorHandling : onError;
-        var CheckPostSuccess = function(result,textStatus,thrownError){
-            if(result['result']==200){
-                successHandle(result['response'],textStatus,thrownError);
-            } else {
-                errorHandle(result['response'],textStatus,thrownError);
-            }
-        };
 
         var defaults = {
             type : "POST",
             url : document.location.pathname + location.search,
             data : data,
             dataType : 'json',
-            success : CheckPostSuccess,
-            error : errorHandle,
+            success : function(data){
+                if(data.success){
+                    successHandle(data.data);
+                } else {
+                    if(onError)
+                        onError(data);
+                    Log("Ajax request: " + action + ", gave error: "+data.message);
+                }
+            },
+            error : DefaultOnErrorHandling,
             statusCode: {
-                404: function() {
-                    alert( "page not found" );
-                },
+                404: pageNotFound,
                 401: GotoLoginPage
             },
             async: !sync
@@ -72,9 +70,13 @@ var api = {};
         return $.ajax(defaults);
     };
 
+    function pageNotFound(){
+        alert( "Ajax Request Page was not found, ask administrator" );
+    }
+
     var DefaultOnErrorHandling = function(result,textStatus,thrownError){
         Log(result);
-        alert("Request failed with: "+textStatus.ucFirst()+": "+thrownError+"\nMessage: "+result.responseJSON+"\nSee log for detailed error.");
+        Log("Request failed with: "+textStatus.ucFirst()+": "+thrownError+"\nMessage: "+result.responseJSON+"\nSee log for detailed error.");
     }
 
 })(jQuery);

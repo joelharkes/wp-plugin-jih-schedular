@@ -13,6 +13,31 @@ use HttpStatusCode;
 use models\Calendar;
 use models\Event;
 
+
+class Ajax {
+    public static function Error($number,$message = 'error'){
+        $json = array(
+            'success'=>false,
+            'error' => $number,
+            'message' => $message );
+        self::Json($json);
+    }
+
+    public static function Success($data,$message = 'success'){
+        $json = array(
+            'success'=>true,
+            'data' => $data,
+            'message' => $message
+        );
+        self::Json($json);
+    }
+
+    private static function Json($data){
+        echo json_encode($data);
+        die();
+    }
+}
+
 class AjaxController extends Controller {
 
 
@@ -24,15 +49,15 @@ class AjaxController extends Controller {
      */
     public function EventsForWeek($calendarId,$date){
         $date = new Date($date);
-        $this->Json($this->dbContext->EventViewModels()->Where('calendarId',$calendarId)->Where('datetime >=',$date)->Where('datetime <',$date->CloneAddDays(7))->Execute());
+        Ajax::Success($this->dbContext->EventViewModels()->Where('calendarId',$calendarId)->Where('datetime >=',$date)->Where('datetime <',$date->CloneAddDays(7))->Execute());
     }
 
     public function EventById($id){
-        $this->Json($this->dbContext->EventViewModels()->Where('id',$id)->Execute());
+        Ajax::Success($this->dbContext->EventViewModels()->Where('id',$id)->Execute());
     }
 
     public function CalendarById($id){
-        $this->Json($this->dbContext->Calendars()->Where('id',$id)->Execute());
+        Ajax::Success($this->dbContext->Calendars()->Where('id',$id)->Execute());
     }
 
     public function SaveEvent($data){
@@ -40,7 +65,7 @@ class AjaxController extends Controller {
             $this->EditEvent($data);
 
         if($this->dbContext->Events()->Where('datetime',$data['datetime'])->Any()){
-            $this->JsonResult(false,"DuplicateEvent");
+            Ajax::Error(5,"Already event on this datetime");
         }
 
         $user = \wp_get_current_user();
@@ -50,17 +75,15 @@ class AjaxController extends Controller {
             $event->setName($user->user_login);
             $event->setUserId($user->ID);
             $result = $this->dbContext->Events()->Insert( $event );
-            $this->JsonResult($result);
-            return;
+            Ajax::Success($result);
         }
 
         if(isAdministrator() || $this->checkCaptcha($data)) {
             $event  = new Event( $data );
             $result = $this->dbContext->Events()->Insert( $event );
-            $this->JsonResult($result);
-            return;
+            Ajax::Success($result);
         }
-        $this->JsonResult(false);
+        Ajax::Error(4,"Failed Captcha");
     }
 
     public function EditEvent($data){
@@ -68,38 +91,39 @@ class AjaxController extends Controller {
             $event = new Event($this->dbContext->Events()->FindById(\Input::Get('id')));
             $event->setAttributes($data);
             $result = $this->dbContext->Events()->UpdateModel($event);
-            $this->JsonResult($result);
+            Ajax::Success($result);
         }
-        $this->JsonResult(false);
+        Ajax::Error(4,"Failed Captcha");
     }
 
     public function DeleteEvent($id){
         if(isAdministrator()){
             $result = $this->dbContext->Events()->Where('id',$id)->Delete();
-            $this->JsonResult($result);
+            Ajax::Success($result, "Event deleted");
         }
         $user = \wp_get_current_user();
         if ($user!=null){
             $eventUserId = $this->dbContext->Events()->Where('id',$id)->First()->userId;
             if($user->ID == $eventUserId){
                 $result = $this->dbContext->Events()->Where('id',$id)->Delete();
-                $this->JsonResult($result);
+                Ajax::Success($result,"Deleted one of your events");
             } else {
-                $this->JsonResult(false,"Not your event");
+                Ajax::Error(3,"Not your event");
             }
         }
-        $this->JsonResult(false);
+        Ajax::Error(2,"Not logged in");
     }
 
     public function DeleteEventByPin($id,$pin){
         $event = new Event($this->dbContext->Events()->FindById($id));
+        if($event->getId() == 0){
+            Ajax::Error(1, "Event does not exist");
+        }
         if( !empty($pin) && $event->getPin() == $pin){
             $result = $this->dbContext->Events()->Where('id',$id)->Delete();
+            Ajax::Success($result,"Event deleted");
         }
-        else {
-            $result = false;
-        }
-        $this->JsonResult($result);
+        Ajax::Error(3,"Event pin incorrect");
     }
 
     public function SaveCalendar($data){
@@ -108,40 +132,37 @@ class AjaxController extends Controller {
         if(isAdministrator()){
             $calendar = new Calendar($data);
             $result = $this->dbContext->Calendars()->Insert($calendar);
-            $this->JsonResult($result,"Calendar Created");
+            Ajax::Success($result,"Calendar Created");
         }
-        $this->JsonResult(false);
+        Ajax::Error(1, "No admin rights");
     }
 
     public function EditCalendar($data){
         if(isAdministrator()){
             $calendar = new Calendar($this->dbContext->Calendars()->FindById(\Input::Get('id')));
+            if($calendar->getId() == 0)
+                Ajax::Error(1, "Calendar does not exist");
+
             $calendar->setAttributes($data);
             $result = $this->dbContext->Calendars()->UpdateModel($calendar);
-            $this->JsonResult($result);
+            Ajax::Success($result, "Calendar updated");
         }
-        $this->JsonResult(false);
+        Ajax::Error(1, "No admin rights");
     }
 
     public function DeleteCalendar($id){
         if(isAdministrator()){
             $result = $this->dbContext->Events()->Where('calendarId',$id)->Delete();
             $result += $this->dbContext->Calendars()->Where('id',$id)->Delete();
-            $this->JsonResult($result);
+            Ajax::Success($result);
         }
-        $this->JsonResult(false);
+        Ajax::Error(1, "No admin rights");
     }
 
-    private function JsonResult($result,$errorMessage="Request was not allowed :S"){
-        $this->Json($errorMessage,$result !== false ? HttpStatusCode::OK : HttpStatusCode::FORBIDDEN);
-    }
 
-    private function Json($data,$responseCode = HttpStatusCode::OK){
-//        http_response_code($responseCode);
-        $data = array('result'=>$responseCode,'response'=> $data);
-        echo json_encode($data);
-        die($responseCode);
-    }
+
+
+
 
     private function checkCaptcha($data){
         $captcha = $data['g-recaptcha-response'];

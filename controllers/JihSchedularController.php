@@ -41,7 +41,7 @@ class JihSchedularController extends Controller {
     public function WeekAction(){
         $data = array();
         $date = new Date(Input::Param('date','now'));
-        $date = $date->FirstDayOfWeek();
+        $date = $date->addDay(10);
         $startDate = clone $date;
         $dates = array(clone $date);
         while(count($dates)<7){
