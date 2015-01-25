@@ -5,6 +5,7 @@
  * Date: 11-Oct-14
  * Time: 13:01
  */
+namespace helpers;
 
 class Input {
 

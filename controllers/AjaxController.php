@@ -7,39 +7,14 @@
  */
 namespace controllers;
 
-
-use Date;
+use helpers\Ajax;
+use helpers\Date;
+use helpers\Input;
 use models\Calendar;
 use models\Event;
 use models\User;
 
-
-class Ajax {
-    public static function Error($number,$message = 'error'){
-        $json = array(
-            'success'=>false,
-            'error' => $number,
-            'message' => $message );
-        self::Json($json);
-    }
-
-    public static function Success($data,$message = 'success'){
-        $json = array(
-            'success'=>true,
-            'data' => $data,
-            'message' => $message
-        );
-        self::Json($json);
-    }
-
-    private static function Json($data){
-        echo json_encode($data);
-        die();
-    }
-}
-
 class AjaxController extends Controller {
-
 
     /**
      * @param $calendarId
@@ -61,7 +36,7 @@ class AjaxController extends Controller {
     }
 
     public function SaveEvent($data){
-        if(\Input::Get('id')) //Remote to Edit
+        if(Input::Get('id')) //Remote to Edit
             $this->EditEvent($data);
 
         if($this->dbContext->Events()->Where('datetime',$data['datetime'])->Any()){
@@ -88,7 +63,7 @@ class AjaxController extends Controller {
 
     public function EditEvent($data){
         if(isAdministrator() || $this->checkCaptcha($data)) {
-            $event = new Event($this->dbContext->Events()->FindById(\Input::Get('id')));
+            $event = new Event($this->dbContext->Events()->FindById(Input::Get('id')));
             $event->setAttributes($data);
             $result = $this->dbContext->Events()->UpdateModel($event);
             Ajax::Success($result);
@@ -127,7 +102,7 @@ class AjaxController extends Controller {
     }
 
     public function SaveCalendar($data){
-        if(\Input::Get('id'))
+        if(Input::Get('id'))
             $this->EditCalendar($data);
         if(isAdministrator()){
             $calendar = new Calendar($data);
@@ -139,7 +114,7 @@ class AjaxController extends Controller {
 
     public function EditCalendar($data){
         if(isAdministrator()){
-            $calendar = new Calendar($this->dbContext->Calendars()->FindById(\Input::Get('id')));
+            $calendar = new Calendar($this->dbContext->Calendars()->FindById(Input::Get('id')));
             if($calendar->getId() == 0)
                 Ajax::Error(1, "Calendar does not exist");
 

@@ -8,7 +8,7 @@
 
 namespace Twig;
 
-use JihViewHelper;
+use helpers\ViewHelper;
 use models\User;
 use Singleton;
 use Twig_Autoloader;
@@ -29,10 +29,10 @@ class WpTwigViewHelper extends Singleton {
      * @param bool $debug
      */
     protected function __construct($viewLocation = null, $debug = true){
-        require_once JIH_PATH.'Twig/Twig/Autoloader.php';
+        require_once JIH_PATH.'/Twig/Twig/Autoloader.php';
         Twig_Autoloader::register();
 
-        $loader = new Twig_Loader_Filesystem($viewLocation ?: JIH_PATH.'views');
+        $loader = new Twig_Loader_Filesystem($viewLocation ?: JIH_PATH.'/views');
         $this->twig = new Twig_Environment($loader, array(
 //            'cache' => JIH_PATH.'viewscache',
             'debug' => $debug
@@ -64,7 +64,7 @@ class WpTwigViewHelper extends Singleton {
 
     public function loadTemplate($template = 'theme-mine-zine.twig'){
         $this->template = $this->twig->loadTemplate($template);
-        JihViewHelper::getInstance()->LoadView('default-template');
+        ViewHelper::getInstance()->LoadView('default-template');
     }
 
     public static function LoadView($template = 'theme-mine-zine.twig',array $templateData = array(),$overwrite = false){

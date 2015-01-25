@@ -9,8 +9,8 @@
 namespace models;
 
 
-use Date;
 use db\AWPModel;
+use helpers\Date;
 
 class Event extends AWPModel {
     public static $_Table = 'jih_event';

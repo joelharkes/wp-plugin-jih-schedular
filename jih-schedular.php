@@ -12,10 +12,12 @@ License: A "Slug" license name e.g. GPL2
 
 use controllers\AdminController;
 use controllers\AjaxController;
-use controllers\JihSchedularController;
+use controllers\ScheduleController;
+use helpers\Input;
 use Twig\WpTwigViewHelper;
 
-define('JIH_PATH',plugin_dir_path( __FILE__ ));
+define('JIH_PATH',substr(plugin_dir_path( __FILE__ ),0,-1));
+define('JIH_URL',plugins_url('', __FILE__ ));
 define('JIH_CONTROLLER_ACTION_PARAM','Action');
 
 include(ABSPATH . "wp-includes/pluggable.php");
@@ -24,11 +26,8 @@ include(ABSPATH . "wp-includes/pluggable.php");
 spl_autoload_register( 'AutoLoadJihSchedularFiles' );
 function AutoLoadJihSchedularFiles( $class ) {
     $sanitizedClass =  str_replace('\\',DIRECTORY_SEPARATOR,$class);
-//    if(strpos($sanitizedClass,'WpConnection')!==false){
-//        die('Dide class load: Tried to load file: '.JIH_PATH . $sanitizedClass . '.php and it exists?:'.file_exists ( JIH_PATH . $sanitizedClass . '.php' ));
-//    }
-    if ( file_exists ( JIH_PATH . $sanitizedClass . '.php' ) ){
-        include( JIH_PATH . $sanitizedClass . '.php' );
+    if ( file_exists ( JIH_PATH .'\\'. $sanitizedClass . '.php' ) ){
+        include( JIH_PATH .'\\'. $sanitizedClass . '.php' );
     }
 }
 
@@ -36,15 +35,19 @@ function AutoLoadJihSchedularFiles( $class ) {
 add_action( 'plugins_loaded', 'InstallPlugin' );
 
 global $jih_version;
-$jih_version = '1.8';
+$jih_version = '1.0';
 function InstallPlugin() {
     global $jih_version;
     if ( get_site_option( 'jih_schedular_version' ) != $jih_version ) {
-        //somehow versio always executes
-        JihInstaller::DropEverything();
-        JihInstaller::Install();
-//        JihInstaller::InstallTestDate();
+        $installer = new \controllers\InstallController();
+        $installer->InstallAction();
+        $installer->InstallTestDataAction();
     }
+}
+
+if(Input::Param('Install',false)){
+    $controller = new \controllers\InstallController();
+    $controller->route(Input::Param('Install'));
 }
 
 //CONTROLLER LOGIC
@@ -59,7 +62,7 @@ if(Input::Post('dataType')=='json'){
 if(!is_admin()){
 
     if(Input::Param(JIH_CONTROLLER_ACTION_PARAM)){
-        $controller = new JihSchedularController();
+        $controller = new ScheduleController();
         $controller->route(Input::Param(JIH_CONTROLLER_ACTION_PARAM));
     }
 

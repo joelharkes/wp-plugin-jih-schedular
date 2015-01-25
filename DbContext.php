@@ -22,7 +22,7 @@ class DbContext {
     }
     /**
      * @param string $name class name of model
-     * @return \db\QueryBuilder querybuilder for module
+     * @return \db\QueryBuilder query builder for module
      */
     public function __call($name,$args){
         if ($this->endsWith($name,'s'))

@@ -8,8 +8,8 @@
 
 namespace controllers;
 
-use JihViewHelper;
-use models\Calendar;
+use helpers\Input;
+use helpers\ViewHelper;
 use Twig\WpTwigViewHelper;
 
 class AdminController extends Controller{
@@ -20,7 +20,7 @@ class AdminController extends Controller{
     }
 
     public static function DoImports(){
-        $helper = JihViewHelper::getInstance();
+        $helper = ViewHelper::getInstance();
         $helper->AddCss('css/admin',"jih-plugin");
         $helper->AddCss('lib/datetime-picker/jquery.datetimepicker',"jquery-datetime-picker");
 //        $helper->AddJs('lib/jquery-query','jquery-query');
@@ -38,7 +38,7 @@ class AdminController extends Controller{
     public function  CalendarsAction(){
         $data = array();
         $cal = $this->dbContext->Calendars();
-        if($search = urldecode(\Input::Get('search'))){
+        if($search = urldecode(Input::Get('search'))){
             $cal->WhereLike('name',$search);
         }
         $data['calendars'] = $cal->Execute();
@@ -48,7 +48,7 @@ class AdminController extends Controller{
 
     public function CalendarFormAction(){
         $data=array();
-        if($id = \Input::Param('id'))
+        if($id = Input::Param('id'))
             $data['calendar'] = $this->dbContext->Calendars()->Where('id',$id)->Execute()->First();
         WpTwigViewHelper::LoadView('admin-calendar-form.twig',$data);
     }
@@ -57,7 +57,7 @@ class AdminController extends Controller{
 
         $data = array();
         $cal = $this->dbContext->Events();
-        if($search = urldecode(\Input::Get('search'))){
+        if($search = urldecode(Input::Get('search'))){
             $cal->WhereLike('name',$search);
         }
         $data['events'] = $cal->Execute();
@@ -68,7 +68,7 @@ class AdminController extends Controller{
     public function EventFormAction(){
         $data=array();
         $data['calendars'] = $this->dbContext->Calendars()->Execute()->First();
-        if($id = \Input::Param('id'))
+        if($id = Input::Param('id'))
             $data['event'] = $this->dbContext->Events()->Where('id',$id)->Execute();
         WpTwigViewHelper::LoadView('admin-event-form.twig',$data);
     }

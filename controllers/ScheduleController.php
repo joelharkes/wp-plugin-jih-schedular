@@ -8,22 +8,18 @@
 
 namespace controllers;
 
-use Date;
-use DbContext;
-use Input;
-use JihViewHelper;
+use helpers\Input;
+use helpers\ViewHelper;
 use Twig\WpTwigViewHelper;
 
-class JihSchedularController extends Controller {
-
-
+class ScheduleController extends Controller {
 
     /**
      *  Constructor
      */
     public function __construct(){
         parent::__construct();
-        $helper = JihViewHelper::getInstance();
+        $helper = ViewHelper::getInstance();
         $helper->AddCss('css/plugin',"plugin");
         $helper->AddCss('lib/bootstrap-3.2.0/css/bootstrap',"bootstrap");
 //
@@ -40,15 +36,7 @@ class JihSchedularController extends Controller {
 
     public function WeekAction(){
         $data = array();
-        $date = new Date(Input::Param('date','now'));
-        $date = $date->addDay(10);
-        $startDate = clone $date;
-        $dates = array(clone $date);
-        while(count($dates)<7){
-            $dates[] = clone $date->addDay();
-        }
-//        $data['records'] = $this->dbContext->Events()->Where('datetime >=',$startDate->DbStartOfDay())->Where('datetime <=',$date->DbEndOfDay());
-        $data['dates'] = $dates;
+
         $data['actionName'] = JIH_CONTROLLER_ACTION_PARAM;
         $data['action'] = 'Week';
         $data['calendars'] = $this->dbContext->Calendars()->Execute();

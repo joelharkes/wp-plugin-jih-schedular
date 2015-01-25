@@ -5,6 +5,10 @@
  * Date: 11-Oct-14
  * Time: 14:32
  */
+namespace helpers;
+
+use DateInterval;
+use DateTime;
 
 class Date extends DateTime{
 
