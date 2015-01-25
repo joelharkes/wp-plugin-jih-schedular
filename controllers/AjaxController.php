@@ -9,9 +9,9 @@ namespace controllers;
 
 
 use Date;
-use HttpStatusCode;
 use models\Calendar;
 use models\Event;
+use models\User;
 
 
 class Ajax {
@@ -68,8 +68,8 @@ class AjaxController extends Controller {
             Ajax::Error(5,"Already event on this datetime");
         }
 
-        $user = \wp_get_current_user();
-        if($user != null){
+        if(User::IsLoggedIn()){
+            $user = User::Current();
             $event  = new Event( $data );
             $event->setEmail($user->user_email);
             $event->setName($user->user_login);
@@ -101,10 +101,10 @@ class AjaxController extends Controller {
             $result = $this->dbContext->Events()->Where('id',$id)->Delete();
             Ajax::Success($result, "Event deleted");
         }
-        $user = \wp_get_current_user();
-        if ($user!=null){
+
+        if (User::IsLoggedIn()){
             $eventUserId = $this->dbContext->Events()->Where('id',$id)->First()->userId;
-            if($user->ID == $eventUserId){
+            if(User::Current()->ID == $eventUserId){
                 $result = $this->dbContext->Events()->Where('id',$id)->Delete();
                 Ajax::Success($result,"Deleted one of your events");
             } else {

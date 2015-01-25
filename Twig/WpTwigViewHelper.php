@@ -9,6 +9,7 @@
 namespace Twig;
 
 use JihViewHelper;
+use models\User;
 use Singleton;
 use Twig_Autoloader;
 use Twig_Environment;
@@ -23,6 +24,10 @@ class WpTwigViewHelper extends Singleton {
     public $template;
     public $templateData = array();
 
+    /**
+     * @param string $viewLocation
+     * @param bool $debug
+     */
     protected function __construct($viewLocation = null, $debug = true){
         require_once JIH_PATH.'Twig/Twig/Autoloader.php';
         Twig_Autoloader::register();
@@ -40,7 +45,7 @@ class WpTwigViewHelper extends Singleton {
         $this->addFunction('get_template_part');
         $this->addFunction('get_search_form');
         $this->addFunction('wp_editor');
-        $this->templateData['user'] = \wp_get_current_user();
+        $this->templateData['user'] = User::Current();
 //        wp_get_current_commenter();
     }
 
