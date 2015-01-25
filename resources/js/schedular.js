@@ -154,7 +154,7 @@ function setCalendarOnDate(date){
     var cells = $('td',_calendarEl).removeClass('inThePast');
     var $i = 0;
     while (hourDiff > $i && $i <= 24*7){
-        cells.eq(Math.floor($i/24)+$i%24*7).addClass('inThePast')
+        cells.eq(Math.floor($i/24)+$i%24*7).addClass('inThePast');
         $i++;
     }
     //$('td',_calendarEl).removeClass('inThePast').slice(0,hourDiff).addClass('inThePast');

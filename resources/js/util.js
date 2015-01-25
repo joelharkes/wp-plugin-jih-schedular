@@ -12,10 +12,16 @@ var GotoLoginPage = function(){
   alert('GotoLoginPage not implement yet');
 };
 
+/**
+ * @return {boolean}
+ */
 function IsDefined(item){
     return typeof item !== "undefined";
 }
 
+/**
+ * @return {boolean}
+ */
 function IsEmpty(item){
     return IsDefined(item) && (!item || 0 === item.length);
 }
@@ -28,7 +34,7 @@ function GotoUrl($url){
 
 /* DATE FUNCTIONS*/
 function ThisWeek(){
-    return moment().day(0);
+    return moment().day(0).startOf('day');
 }
 
 
