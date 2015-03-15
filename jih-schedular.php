@@ -26,8 +26,9 @@ include(ABSPATH . "wp-includes/pluggable.php");
 spl_autoload_register( 'AutoLoadJihSchedularFiles' );
 function AutoLoadJihSchedularFiles( $class ) {
     $sanitizedClass =  str_replace('\\',DIRECTORY_SEPARATOR,$class);
-    if ( file_exists ( JIH_PATH .'\\'. $sanitizedClass . '.php' ) ){
-        include( JIH_PATH .'\\'. $sanitizedClass . '.php' );
+    $filePath = JIH_PATH .DIRECTORY_SEPARATOR. $sanitizedClass . '.php';
+    if ( file_exists ( $filePath ) ){
+        include( $filePath);
     }
 }
 
