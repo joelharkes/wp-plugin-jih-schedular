@@ -57,10 +57,10 @@
         {% endfor %}
         </tbody>
     </table>
-    <div class="entry clearfix">
-
-        {{ calendar.description }}
-
+    <div id="calenderDescription" class="entry clearfix">
+        {% autoescape false %}
+            {{ calendar.description }}
+        {% endautoescape %}
     </div>
 
     {% block modals %}

@@ -134,10 +134,12 @@ function getDate(){
 
 function ChangeCalendarId($id){
     _calendarId = $id;
-    //reloadCalendar();
+    reloadCalendar();
     $.cookie('calendarId',$id);
     $('.setCalendarName').text($("option:selected",'#jih-calendar-choice').text());
-    window.location.href = $.query.SET('calendarId',$id);
+    //window.location.href = $.query.SET('calendarId',$id);
+    //TODO reload description
+    history.pushState(null, null,$.query.SET('calendarId',$id));
 }
 
 function setCalendarOnDate(date){
