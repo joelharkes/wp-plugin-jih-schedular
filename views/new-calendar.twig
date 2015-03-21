@@ -1,6 +1,12 @@
 {% extends 'theme-sparkling.twig' %}
 
 {% block content %}
+{% if messageSent %}
+    <div class="alert alert-success" role="alert">
+        De aanvraag is verstuurd.
+        {#<a href="/" class="alert-link">Klik hier om naar de hoofdpagina te gaan.</a>#}
+    </div>
+{% endif %}
 
     <h1>Aanmelden gebedsruimte</h1>
     <p>

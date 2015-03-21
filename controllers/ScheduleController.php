@@ -61,14 +61,12 @@ class ScheduleController extends Controller {
 
             WpTwigViewHelper::LoadView('mail-new-calendar.twig',$data);
             $message = \Twig\WpTwigViewHelper::getInstance()->TryRender();
-
-
             \wp_mail($to, $subject, $message);
+            WpTwigViewHelper::LoadView('new-calendar.twig',array('messageSent'=>true));
         }else {
             $data = array();
             WpTwigViewHelper::LoadView('new-calendar.twig',$data);
         }
-
     }
 
 }
