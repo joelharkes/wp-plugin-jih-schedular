@@ -56,6 +56,10 @@ jQuery(document).ready(function(){
         } else {
             api.SaveEvent(data,onSuccesEventSave);
         }
+
+        if(isLoggedIn()){
+            window.location.reload();
+        }
     });
 
     var $deleteForm = $('#delete-event-form');
