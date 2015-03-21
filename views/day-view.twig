@@ -27,12 +27,13 @@
             <h3 id="calendar-header-date" style="margin: 4px 0 8px 0;"></h3>
         </div>
         <div class="col-md-4">
+            {% if user %}
             <select name="calendar" class="form-control" id="jih-calendar-choice" onchange="ChangeCalendarId($(this).val())" style="">
                 {% for calendar in calendars %}
                     <option value="{{ calendar.id }}">{{ calendar.name }}</option>
                 {% endfor %}
             </select>
-
+            {% endif %}
         </div>
 
     </div>
