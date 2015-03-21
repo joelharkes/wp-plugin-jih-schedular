@@ -36,7 +36,7 @@ class ScheduleController extends Controller {
 
     public function WeekAction(){
         $data = array();
-
+        $data['date'] =  Input::Param('date');
         $data['actionName'] = JIH_CONTROLLER_ACTION_PARAM;
         $data['action'] = 'Week';
         $data['calendars'] = $this->dbContext->Calendars()->Execute();
@@ -49,6 +49,26 @@ class ScheduleController extends Controller {
         }
 
         WpTwigViewHelper::LoadView('day-view.twig',$data);
+    }
+
+    public function NewCalendarAction(){
+
+        if(Input::IsPost()){
+            $data = Input::Post();
+            add_filter( 'wp_mail_content_type', 'set_html_content_type' );
+            $to      = 'denhartoghjohan@gmail.com';
+            $subject = 'Aanvraag gebedsruimte';
+
+            WpTwigViewHelper::LoadView('mail-new-calendar.twig',$data);
+            $message = \Twig\WpTwigViewHelper::getInstance()->TryRender();
+
+
+            \wp_mail($to, $subject, $message);
+        }else {
+            $data = array();
+            WpTwigViewHelper::LoadView('new-calendar.twig',$data);
+        }
+
     }
 
 }

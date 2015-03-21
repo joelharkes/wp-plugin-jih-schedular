@@ -6,6 +6,9 @@
         {% if user %}
         _userId = {{ user.ID }};
         {% endif %}
+        {% if date %}
+        _date = moment('{{ date }}');
+        {% endif %}
     </script>
 
     <div class="content-headline">
@@ -114,16 +117,22 @@
                                 <label for="jih-email" class="col-sm-2 control-label">Herhaal</label>
 
                                 <div class="col-sm-10">
-                                    <input type="checkbox" name="repeat" class="repeatEventCheckbox">
-                                    <span style="display: none;">
-                                    <input type="number" name="repeatQuantity" min="1" max="12" >
-                                     extra keer, elke
-                                    <select name="repeatPeriod">
-                                        <option value="day">dag</option>
-                                        <option value="week">week</option>
-                                        <option value="month">maand</option>
-                                    </select>
-                                    </span>
+                                    {% if not user %}
+                                    Maak <a href="#" class="register-link"  data-dismiss="modal">hier</a> een account aan om van deze feature gebruik te maken.
+                                    {% else %}
+                                        <input type="checkbox" name="repeat" class="repeatEventCheckbox">
+                                        <span style="display: none;">
+                                             Elke
+                                        <select name="repeatPeriod">
+                                            <option value="day">dag</option>
+                                            <option value="week">week</option>
+                                            <option value="month">maand</option>
+                                        </select>
+                                            , voor
+                                        <input type="number" name="repeatQuantity" min="1" max="12" >
+                                         keer
+                                        </span>
+                                    {% endif %}
                                 </div>
                             </div>
                             {% if not user %}

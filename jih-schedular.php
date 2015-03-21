@@ -105,6 +105,10 @@ function startsWith($haystack, $needle)
 {
     return $needle === "" || strpos($haystack, $needle) === 0;
 }
+
+function set_html_content_type() {
+    return 'text/html';
+}
 //EXAMPLES!!
 
 

@@ -46,7 +46,7 @@ jQuery(document).ready(function(){
         data.calendarId = _calendarId;
         if(data.repeat){
             $('.repeatEventCheckbox').click();
-            var iteration = 0;
+            var iteration = 1;
             while(data.repeatQuantity >= iteration){
                 api.SaveEvent(data,false,false,true);
                 data.datetime = moment(data.datetime).add(1,data.repeatPeriod).format(_datetimeFormat);
@@ -144,6 +144,7 @@ function ChangeCalendarId($id){
 
 function setCalendarOnDate(date){
     _date = date;
+    history.pushState(null, null,$.query.SET('date',_date.format(_dateFormat)));
     $('thead th',_calendarEl).each(function(i){
         if(i>0){
             $(this).html(CurDate().add(i-1,'days').format('dddd<br>DD MMM'));

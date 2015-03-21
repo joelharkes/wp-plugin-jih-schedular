@@ -8,6 +8,7 @@
 namespace controllers;
 
 use helpers\Ajax;
+use helpers\Captcha;
 use helpers\Date;
 use helpers\Input;
 use models\Calendar;
@@ -134,19 +135,13 @@ class AjaxController extends Controller {
         Ajax::Error(1, "No admin rights");
     }
 
-
-
-
-
-
+	/**
+     * @param $data
+     *
+     * @return bool
+     */
     private function checkCaptcha($data){
-        $captcha = $data['g-recaptcha-response'];
-        $secret = '6Lcw1vsSAAAAAIxl-CW-cIUhxPwO96EZspyzIUJh';
-        $remoteIp = $_SERVER['REMOTE_ADDR'];
-        $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$captcha&remoteip=$remoteIp";
-        $response = file_get_contents($url);
-        $answers = json_decode($response, true);
-        return $answers['success'] == true;
+       return Captcha::Check($data);
     }
 }
 

@@ -32,4 +32,8 @@ class Input {
             return  !empty($_REQUEST) ? $_REQUEST : $default;
         return  isset($_REQUEST[$item]) ? $_REQUEST[$item] : $default;
     }
+
+    public static function IsPost(){
+        return $_SERVER['REQUEST_METHOD'] === 'POST';
+    }
 }
