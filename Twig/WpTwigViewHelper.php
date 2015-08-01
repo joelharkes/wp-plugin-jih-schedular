@@ -58,23 +58,17 @@ class WpTwigViewHelper extends Singleton {
         $this->templateData[$key] = $data;
     }
 
-    public function TryRender(){
-        return $this->template->render($this->templateData);
-    }
-
-    public function loadTemplate($template = 'theme-mine-zine.twig'){
-        $this->template = $this->twig->loadTemplate($template);
-        ViewHelper::getInstance()->LoadView('default-template');
-    }
-
-    public static function LoadView($template = 'theme-mine-zine.twig',array $templateData = array(),$overwrite = false){
-        $i = static::getInstance();
-        $i->mergeTemplateData($templateData,$overwrite);
-        $i->loadTemplate($template);
+    /**
+     * @param string $template
+     * @return string html of template
+     */
+    public function Render($template = null,array $data = array()){
+        $data = $this->mergeTemplateData($data);
+        return $this->twig->loadTemplate($template ?: $this->templateData)->render($data);
     }
 
     public function mergeTemplateData(array $data,$overwrite = false){
-        $this->templateData = $overwrite ? $data : array_merge($this->templateData,$data);
+        return $overwrite ? $data : array_merge($this->templateData,$data);
     }
 
 }

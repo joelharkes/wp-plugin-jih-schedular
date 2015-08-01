@@ -24,7 +24,7 @@ class Controller {
     public function route($action){
         $actionMethod = $action.'Action';
         if(method_exists($this,$actionMethod))
-            $this->$actionMethod();
+            return $this->$actionMethod();
         else
             throw new Exception("Method $actionMethod was not yet implemented.");
 

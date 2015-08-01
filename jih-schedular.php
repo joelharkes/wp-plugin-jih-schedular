@@ -46,10 +46,24 @@ function InstallPlugin() {
     }
 }
 
+
+$JihHeadIncludes = new JihHeadIncludes();
+
+$controller = new ScheduleController();
+//Register pages used by plugin
+$jihPageContainer = new \helpers\PageContainer();
+$jihPageContainer->add(new \helpers\Page("Calendars",array($controller,'WeekAction')));
+//Register hooks needed for the pages
+register_activation_hook( __FILE__,array($jihPageContainer,'registerPages') );
+register_deactivation_hook( __FILE__,array($jihPageContainer,'unregisterPages') );
+
+
+//Register API CALLS
 if(Input::Param('Install',false)){
     $controller = new \controllers\InstallController();
     $controller->route(Input::Param('Install'));
 }
+
 
 //CONTROLLER LOGIC
 if(Input::Post('dataType')=='json'){
@@ -68,47 +82,25 @@ if(!is_admin()){
     }
 
 
-} else { //If in admin zone
+} else {
+        //If in admin zone
     //ADMIN STUFF
-    add_action( 'admin_menu', 'register_admin_menu');
-    function register_admin_menu(){
-        //Links to AdminController->[item]Action();
-        add_menu_page( 'Jih Schedular', 'Schedular', 'manage_options', 'jih-calendars', 'adminAction','dashicons-calendar' );
-        addSubMenu('Events');
-        addSubMenu('CalendarForm');
-        addSubMenu('EventForm','Event');
-
-    }
-
-    AdminController::DoImports();
-
-}
-
-function adminAction(){
-    $post = ucfirst(substr(Input::Get('page'),4))  ;
-    $controller = new AdminController();
-    $controller->route($post);
-    echo WpTwigViewHelper::getInstance()->TryRender();
-}
-
-function addSubMenu($title,$parent= 'jih-calendars',$action = 'adminAction',$pre='jih-'){
-    $titleName = preg_replace('/(?<=\\w)(?=[A-Z])/'," $1", $title);
-    add_submenu_page($parent, $titleName, $titleName, 'manage_options', $pre.$title, $action);
+    $adminMenu = new \helpers\AdminMenu('Calendars');
+    $adminMenu->AddSubMenu(new \helpers\AdminSubMenu('Events'));
+    $adminMenu->AddSubMenu(new \helpers\AdminSubMenu('Add Calendar',null,'CalendarForm'));
+    $adminMenu->AddSubMenu(new \helpers\AdminSubMenu('Add Event',null,'EventForm'));
 }
 
 function isAdministrator(){
     return current_user_can( 'manage_options' );
 }
 
-
 function startsWith($haystack, $needle)
 {
     return $needle === "" || strpos($haystack, $needle) === 0;
 }
 
-function set_html_content_type() {
-    return 'text/html';
-}
+
 //EXAMPLES!!
 
 

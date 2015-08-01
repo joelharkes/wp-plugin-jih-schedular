@@ -4,7 +4,7 @@
 
 
 {% block form %}
-    <form id="schedular-form" class="form-horizontal" role="form" method="post">
+    <form id="schedular-event-form" class="form-horizontal" role="form" method="post">
 
         <table class="form-table">
             <tbody>
@@ -45,9 +45,8 @@
 {% endblock %}
 
 <script>
-    jQuery('#schedular-form').submit(function(e){
+    jQuery('#schedular-event-form').submit(function(e){
         e.preventDefault();
-        tinyMCE.triggerSave();
         var data = jQuery(this).serializeObject();
         api.SaveEvent(data,function(){
             GotoUrl(jQuery.query.set('page','jih-Events'))
