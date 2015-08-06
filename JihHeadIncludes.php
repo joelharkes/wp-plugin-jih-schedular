@@ -22,11 +22,10 @@ class JihHeadIncludes {
 
 
         $this->AddJs('lib/moment-2.8.3/moment','moment',array('jquery'),false,true);
-        $this->AddJs('lib/jquery-query','jquery-query',array('jquery'),false,true);
+        $this->AddJs('lib/jquery-query','jquery-query',array('jquery'),true,true);
         $this->AddJs('lib/datetime-picker/jquery.datetimepicker','jquery-datetime-picker',array(),false,true);
 
         $this->AddJs('lib/bootstrap-3.2.0/js/bootstrap','bootstrap',array('jquery'),true,false);
-        $this->AddJs('lib/jquery-query','jquery-query',array('jquery'),true,false);
         $this->AddJs('lib/moment-2.8.3/moment-with-locales','moment',array('jquery'),true,false);
         $this->AddJs('lib/jquery.cookie','cookie',array('jquery'),true,false);
         $this->AddJsUrl('https://www.google.com/recaptcha/api.js','google-api',array('jquery'),true,false);
@@ -36,7 +35,10 @@ class JihHeadIncludes {
         $this->AddJs('js/api','api',array('util'),true,true);
 
         $this->AddJs('js/admin','admin',array('api'),false,true);
-        $this->AddJs('js/schedular','schedular',array('api'),true,false);
+
+//        $this->AddJs('js/schedular','schedular',array('api'),true,false);
+        $this->AddJs('lib/jquery-ui.min','jquery-ui',array('jquery'),true,false);
+        $this->AddJs('js/schedule','jih.schedule',array('api','jquery-ui'),true,false);
 
     }
 

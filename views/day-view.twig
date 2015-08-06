@@ -3,12 +3,103 @@
 {% block content %}
 
     <script>
-            {% if user %}
-            _userId = {{ user.ID }};
-            {% endif %}
-            {% if date %}
-            _date = moment('{{ date }}');
-            {% endif %}
+
+        $(document).ready(function () {
+            $infoModal = $('#jih-info-modal');
+            $eventModal = $('#jih-plan-hour');
+            $cal = $('#jih-calendar');
+            var _datetimeFormat = 'YYYY-MM-DD HH:mm:ss';
+            var loggedIn = {{ user ? 'true' : 'false' }};
+            var userId = {{ user.ID ?: 0 }};
+
+            $cal.schedule({
+                calendarId : 1,
+                showCalendarOptions : {{ user ? 'true' : 'false' }},
+                date : moment($.query.get('date') || moment({% if date %}'{{ date }}'{% endif %}).format('YYYY-MM-DD')),
+                onTimeSlotClicked : function(data,clickEvent){
+                    var $this = $(data.event);
+                    if($this.hasClass('is-filled')){
+                        $infoModal.modal('show');
+                        var event = $this.data('event');
+                        $.each(event,function(attr,value){
+                            $infoModal.find('div.data-'+attr).text(value);
+                            $infoModal.find('input.data-'+attr).val(value);
+                        });
+
+                        $('.deleteBtn',$infoModal).prop( "disabled", event.userId != userId );
+                        if(!loggedIn){
+                            if (event.userId != userId)
+                                $('.pin-group',$infoModal).hide();
+                            else
+                                $('.pin-group',$infoModal).show();
+                        }
+
+
+                    } else if(!$this.hasClass('inThePast')) {
+                        $('input[name=datetime]',$eventModal).val(data.date.format(_datetimeFormat));
+                        $('input[name=redirectUrl]',$eventModal).val(document.URL);
+                        $eventModal.modal('show');
+                    }
+                }
+            });
+
+
+            var onSuccesEventSave = function(){
+                $eventModal.modal('hide');
+                $cal.schedule('reload');
+            };
+
+            var $eventForm = $('#schedular-event-form');
+            $eventForm.submit(function(e){
+                e.preventDefault();
+                var data = $eventForm.serializeObject();
+                data.calendarId = $cal.schedule('getCalendarId');
+                if(data.repeat){
+                    $('.repeatEventCheckbox').click();
+                    var iteration = 1;
+                    while(data.repeatQuantity >= iteration){
+                        api.SaveEvent(data,false,false,true);
+                        data.datetime = moment(data.datetime).add(1,data.repeatPeriod).format(_datetimeFormat);
+                        iteration++;
+                    }
+                    onSuccesEventSave();
+                } else {
+                    api.SaveEvent(data,onSuccesEventSave);
+                }
+
+                if(loggedIn){
+                    window.location.reload();
+                }
+            });
+
+            var $deleteForm = $('#delete-event-form');
+            $deleteForm.submit(function(e){
+                e.preventDefault();
+                var data = $deleteForm.serializeObject();
+                var onSuccess = function(){
+                    $infoModal.modal('hide');
+                    $cal.schedule('reload');
+                };
+                if(loggedIn){
+                    api.DeleteEvent(data.id,onSuccess,function(){
+                        alert('Event not deleted, it was not made on this account')
+                    })
+                } else {
+                    api.DeleteEventByPin(data,onSuccess,function(){
+                        alert('Event not deleted, wrong pincode. (Events without pin cannot be deleted by users)')
+                    })
+                }
+
+            });
+
+            //Repeat behaviour
+            $('.repeatEventCheckbox').click(function(){
+                $(this).next().toggle();
+            });
+
+
+        });
+
     </script>
 
     <div class="schedular-body">
@@ -18,18 +109,18 @@
 
         <div class="schedular-header row">
             <div class="col-md-5">
-                <a onclick="gotoWeekBefore()" class="btn">&lt;&lt;</a>
-                <a onclick="gotoDayBefore()" class="btn">&lt;</a>
-                <a onclick="gotoToday()" class="btn">Vandaag</a>
-                <a onclick="gotoDayAfter()" class="btn">&gt;</a>
-                <a onclick="gotoWeekAfter()" class="btn">&gt;&gt;</a>
+                <a onclick="$('#jih-calendar').schedule('gotoLast',7,'days');" class="btn">&lt;&lt;</a>
+                <a onclick="$('#jih-calendar').schedule('gotoLast',1,'days');" class="btn">&lt;</a>
+                <a onclick="$('#jih-calendar').schedule('goto',moment());" class="btn">Vandaag</a>
+                <a onclick="$('#jih-calendar').schedule('gotoNext',1,'days');" class="btn">&gt;</a>
+                <a onclick="$('#jih-calendar').schedule('gotoNext',7,'days');" class="btn">&gt;&gt;</a>
             </div>
             <div class="col-md-3">
                 <h3 id="calendar-header-date" style="margin: 4px 0 8px 0;"></h3>
             </div>
             <div class="col-md-4">
                 {% if user %}
-                <select name="calendar" class="form-control" id="jih-calendar-choice" onchange="ChangeCalendarId($(this).val())" style="">
+                <select name="calendar" class="form-control" id="jih-calendar-choice" onchange="$('#jih-calendar').schedule('changeCalendar',$(this).val())">
                     {% for calendar in calendars %}
                         <option value="{{ calendar.id }}">{{ calendar.name }}</option>
                     {% endfor %}
@@ -139,7 +230,7 @@
                                 </div>
                             </div>
                             {% if not user %}
-                            <div class="form-group">
+                            <div class="form-group pin-group">
                                 <label for="jih-pin" class="col-sm-2 control-label">Pin</label>
 
                                 <div class="col-sm-10">
@@ -211,7 +302,7 @@
                                 </div>
                             </div>
                             {% if not user %}
-                            <div class="form-group">
+                            <div class="form-group pin-group">
                                 <label for="jih-info-pin" class="col-sm-2 control-label">Pin</label>
 
                                 <div class="col-sm-10">
@@ -221,7 +312,7 @@
                             {% endif %}
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button id="deleteEventButton" type="submit" class="btn btn-danger">Delete</button>
+                                <button id="deleteEventButton" class="deleteBtn" type="submit" class="btn btn-danger">Delete</button>
                             </div>
                         </div>
                     </form>

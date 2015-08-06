@@ -141,8 +141,6 @@ function ChangeCalendarId($id){
     reloadCalendar();
     $.cookie('calendarId',$id);
     $('h1.entry-title').text($("option:selected",'#jih-calendar-choice').text());
-    //window.location.href = $.query.SET('calendarId',$id);
-    //TODO reload description
     history.pushState(null, null,$.query.SET('calendarId',$id));
 }
 

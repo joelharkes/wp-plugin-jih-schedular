@@ -36,6 +36,10 @@ class AjaxController extends Controller {
         Ajax::Success($this->dbContext->Calendars()->Where('id',$id)->Execute());
     }
 
+    public function Calendars(){
+        Ajax::Success($this->dbContext->Calendars()->Execute());
+    }
+
     public function SaveEvent($data){
         if(Input::Get('id')) //Remote to Edit
             $this->EditEvent($data);

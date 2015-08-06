@@ -5,37 +5,45 @@ var api = {};
 (function($) {
     var _datetimeFormat = 'YYYY-MM-DD HH:mm:ss';
 
-    api.EventById = function(id,onSuccess,onError, sync){
-        return post('EventById',{id : id},onSuccess,onError, sync)
+    api.EventById = function(id,onSuccess,onError, sync, context){
+        return post('EventById',{id : id},onSuccess,onError, sync, context)
     };
 
-    api.EventsForWeek = function(calendarId, date,onSuccess,onError, sync){
-        return post('EventsForWeek',{calendarId : calendarId, date : date.format(_datetimeFormat)},onSuccess,onError, sync)
+    api.EventsForWeek = function(calendarId, date,onSuccess,onError, sync, context){
+        return post('EventsForWeek',{calendarId : calendarId, date : date.format(_datetimeFormat)},onSuccess,onError, sync, context)
     };
 
-    api.SaveEvent = function(data,onSuccess,onError, sync){
-        return post('SaveEvent',data,onSuccess,onError, sync)
+    api.SaveEvent = function(data,onSuccess,onError, sync, context){
+        return post('SaveEvent',data,onSuccess,onError, sync, context)
     };
 
-    api.DeleteEvent = function(id,onSuccess,onError, sync){
-        return post('DeleteEvent',{id : id},onSuccess,onError, sync)
+    api.DeleteEvent = function(id,onSuccess,onError, sync, context){
+        return post('DeleteEvent',{id : id},onSuccess,onError, sync, context)
     };
 
     //Data: Id and Pin
-    api.DeleteEventByPin = function(data,onSuccess,onError, sync){
-        return post('DeleteEventByPin',data,onSuccess,onError, sync)
+    api.DeleteEventByPin = function(data,onSuccess,onError, sync, context){
+        return post('DeleteEventByPin',data,onSuccess,onError, sync, context)
     };
 
-    api.SaveCalendar = function(data,onSuccess,onError, sync){
-        return post('SaveCalendar',data,onSuccess,onError, sync)
+    api.Calendars = function(data,onSuccess,onError, sync, context){
+        return post('Calendars',data,onSuccess,onError, sync, context)
     };
 
-    api.DeleteCalendar = function(id,onSuccess,onError, sync){
-        return post('DeleteCalendar',{id : id},onSuccess,onError, sync)
+    api.CalendarById = function(id,onSuccess,onError, sync, context){
+        return post('CalendarById',{id : id},onSuccess,onError, sync, context)
+    };
+
+    api.SaveCalendar = function(data,onSuccess,onError, sync, context){
+        return post('SaveCalendar',data,onSuccess,onError, sync, context)
+    };
+
+    api.DeleteCalendar = function(id,onSuccess,onError, sync, context){
+        return post('DeleteCalendar',{id : id},onSuccess,onError, sync, context)
     };
 
 
-    var post = function(action,input,onSuccess, onError, sync, options){
+    var post = function(action,input,onSuccess, onError, sync, context, options){
         var data = {
             action : action,
             dataType : 'json',
@@ -50,10 +58,10 @@ var api = {};
             dataType : 'json',
             success : function(data){
                 if(data.success){
-                    successHandle(data.data);
+                    successHandle(data.data,context);
                 } else {
                     if(onError)
-                        onError(data);
+                        onError(data,context);
                     Log("Ajax request: " + action + ", gave error: "+data.message);
                 }
             },
