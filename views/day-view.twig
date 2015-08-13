@@ -3,7 +3,6 @@
 {% block content %}
 
     <script>
-
         $(document).ready(function () {
             $infoModal = $('#jih-info-modal');
             $eventModal = $('#jih-plan-hour');
@@ -13,9 +12,9 @@
             var userId = {{ user.ID ?: 0 }};
 
             $cal.schedule({
-                calendarId : 1,
+                calendarId : {{ calendarId ? calendarId : 1  }},
                 showCalendarOptions : {{ user ? 'true' : 'false' }},
-                date : moment($.query.get('date') || moment({% if date %}'{{ date }}'{% endif %}).format('YYYY-MM-DD')),
+                date : moment($.query.get('date') || moment({% if date %}'{{ date }}'{% endif %}).day(1).startOf('day').format('YYYY-MM-DD')), // start on monday
                 onTimeSlotClicked : function(data,clickEvent){
                     var $this = $(data.event);
                     if($this.hasClass('is-filled')){
@@ -111,7 +110,7 @@
             <div class="col-md-5">
                 <a onclick="$('#jih-calendar').schedule('gotoLast',7,'days');" class="btn">&lt;&lt;</a>
                 <a onclick="$('#jih-calendar').schedule('gotoLast',1,'days');" class="btn">&lt;</a>
-                <a onclick="$('#jih-calendar').schedule('goto',moment());" class="btn">Vandaag</a>
+                <a onclick="$('#jih-calendar').schedule('goto',moment());" class="btn">{{ tr('Today') }}</a>
                 <a onclick="$('#jih-calendar').schedule('gotoNext',1,'days');" class="btn">&gt;</a>
                 <a onclick="$('#jih-calendar').schedule('gotoNext',7,'days');" class="btn">&gt;&gt;</a>
             </div>
@@ -122,7 +121,7 @@
                 {% if user %}
                 <select name="calendar" class="form-control" id="jih-calendar-choice" onchange="$('#jih-calendar').schedule('changeCalendar',$(this).val())">
                     {% for calendar in calendars %}
-                        <option value="{{ calendar.id }}">{{ calendar.name }}</option>
+                        <option value="{{ calendar.id }}" {{ calendar.id==calendarId ? 'selected' }}>{{ calendar.name }}</option>
                     {% endfor %}
                 </select>
                 {% endif %}

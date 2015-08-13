@@ -11,11 +11,28 @@ use helpers\Ajax;
 use helpers\Captcha;
 use helpers\Date;
 use helpers\Input;
+use helpers\Setting;
 use models\Calendar;
 use models\Event;
 use models\User;
+use Twig\WpTwigViewHelper;
 
+
+/*
+ * Called if ajax request is done via api.js
+ * ! Methods start with save will be array
+ * Otherwise list of functions
+ */
 class AjaxController extends Controller {
+
+    public  function SendMail($data){
+        add_filter( 'wp_mail_content_type', array($this,'GetHtmlContentType') );
+        $to      = 'denhartoghjohan@gmail.com';
+        $subject = 'Aanvraag gebedsruimte';
+
+        $message = WpTwigViewHelper::getInstance()->Render('mail-new-calendar.twig',$data);
+        Ajax::Success(\wp_mail($to, $subject, $message));
+    }
 
     /**
      * @param $calendarId
@@ -135,6 +152,14 @@ class AjaxController extends Controller {
             $result = $this->dbContext->Events()->Where('calendarId',$id)->Delete();
             $result += $this->dbContext->Calendars()->Where('id',$id)->Delete();
             Ajax::Success($result);
+        }
+        Ajax::Error(1, "No admin rights");
+    }
+
+    public function SetSetting($name,$value){
+        if(isAdministrator()){
+            Setting::set($name,$value);
+            Ajax::Success($value);
         }
         Ajax::Error(1, "No admin rights");
     }

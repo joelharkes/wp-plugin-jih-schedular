@@ -21,6 +21,11 @@ class Twig_SimpleFunction
     protected $options;
     protected $arguments = array();
 
+    /**
+     * @param string $name
+     * @param callable $callable
+     * @param array $options
+     */
     public function __construct($name, $callable, array $options = array())
     {
         $this->name = $name;

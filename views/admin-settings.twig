@@ -1,0 +1,31 @@
+<h2> {{ tr('Settings') }}
+</h2>
+<a href="#" class="go-back">{{ tr('Back') }}</a>
+<p>
+{{ tr('any change you make in this page will directly be saved!') }}
+</p>
+{% block form %}
+    <form id="schedular-settings-form" class="form-horizontal" role="form" method="post">
+
+        <table class="form-table">
+            <tbody>
+            <tr class="form-field">
+                <th><label for="event-calendar">{{ tr('Default calendar') }}</label></th>
+                <td><select name="defaultCalendar" id="event-calendar">
+                        {% for cal in calendars %}
+                            <option value="{{ cal.id }}" {{ cal.id==calendar ? 'selected' }}>{{ cal.name }}</option>
+                        {% endfor %}
+                    </select></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+{% endblock %}
+
+<script>
+
+    jQuery('#schedular-settings-form input,select').change(function(){
+        //Automatically safe setting directly:
+        api.SetSetting($(this).prop('name'),$(this).val());
+    })
+</script>

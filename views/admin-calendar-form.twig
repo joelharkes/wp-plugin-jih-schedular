@@ -1,6 +1,6 @@
-<h2>{{ calendar ? 'Edit' : 'New' }} Calendar
+<h2>{{ calendar ? tr('Edit') : tr('New') }} {{ tr('Calendar') }}
 </h2>
-<a href="#" class="go-back">Back</a>
+<a href="#" class="go-back">{{ tr('Back') }}</a>
 
 
 {% block form %}
@@ -9,17 +9,17 @@
         <table class="form-table">
             <tbody>
             <tr class="form-field form-required">
-                <th><label for="calendar-name">Name</label></th>
+                <th><label for="calendar-name">{{ tr('Name') }}</label></th>
                 <td><input id="calendar-name" type="text" name="name" placeholder="Name" value="{{ calendar.name }}"></td>
             </tr>
             <tr class="form-field form-required">
-                <th><label for="calendar-description">Description</label></th>
+                <th><label for="calendar-description">{{ tr('Description') }}</label></th>
                 <td>{{ wp_editor( calendar.description, 'description', [] ) }}
                     {#<textarea id="calendar-description" rows="3" name="description" placeholder="Description">{{ calendar.description }}</textarea>#}
                 </td>
             <tr class="form-field">
                 <td class="right"></td>
-                <td><button type="submit" class="button button-primary">Save</button></td>
+                <td><button type="submit" class="button button-primary">{{ tr('Save') }}</button></td>
             </tr>
             </tbody>
         </table>

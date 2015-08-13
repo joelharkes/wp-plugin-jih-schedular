@@ -5,6 +5,11 @@ var api = {};
 (function($) {
     var _datetimeFormat = 'YYYY-MM-DD HH:mm:ss';
 
+    api.SendMail = function(data,onSuccess,onError, sync, context){
+        return post('EventById',data,onSuccess,onError, sync, context)
+    };
+
+
     api.EventById = function(id,onSuccess,onError, sync, context){
         return post('EventById',{id : id},onSuccess,onError, sync, context)
     };
@@ -41,6 +46,11 @@ var api = {};
     api.DeleteCalendar = function(id,onSuccess,onError, sync, context){
         return post('DeleteCalendar',{id : id},onSuccess,onError, sync, context)
     };
+
+    api.SetSetting = function(name,value,onSuccess,onError, sync, context){
+        return post('SetSetting',{name : name, value: value},onSuccess,onError, sync, context)
+    };
+
 
 
     var post = function(action,input,onSuccess, onError, sync, context, options){

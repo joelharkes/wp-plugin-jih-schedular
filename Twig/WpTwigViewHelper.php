@@ -14,6 +14,7 @@ use Singleton;
 use Twig_Autoloader;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
+use Twig_SimpleFunction;
 
 
 class WpTwigViewHelper extends Singleton {
@@ -45,12 +46,22 @@ class WpTwigViewHelper extends Singleton {
         $this->addFunction('get_template_part');
         $this->addFunction('get_search_form');
         $this->addFunction('wp_editor');
+
+
+        $this->twig->addFunction(new Twig_SimpleFunction('tr', array($this, 'tr')));
         $this->templateData['user'] = User::Current();
 //        wp_get_current_commenter();
     }
 
-    private function addFunction($string){
-        $func = new FunctionWrapper($string);
+    public function tr($defaultText){
+        return __($defaultText,'jih-schedular');
+    }
+
+    /**
+     * @param callable $callable
+     */
+    private function addFunction($callable){
+        $func = new FunctionWrapper($callable);
         $func->add_to_twig($this->twig);
     }
 

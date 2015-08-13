@@ -32,20 +32,27 @@ function AutoLoadJihSchedularFiles( $class ) {
     }
 }
 
-//INSTALL SCRIPT
-add_action( 'plugins_loaded', 'InstallPlugin' );
-
-global $jih_version;
-$jih_version = '1.0';
-function InstallPlugin() {
-    global $jih_version;
-    if ( get_site_option( 'jih_schedular_version' ) != $jih_version ) {
-        $installer = new \controllers\InstallController();
-        $installer->InstallAction();
-        $installer->InstallTestDataAction();
-    }
+add_action('plugins_loaded', 'loadTranslations');
+function loadTranslations() {
+    load_plugin_textdomain( 'jih-schedular', false, dirname( plugin_basename(__FILE__) ) . '/lang/' );
 }
 
+//INSTALL SCRIPT
+//TODO REPLACE: SAFE CREATE TABLE AND
+add_action( 'plugins_loaded', 'InstallPlugin' );
+
+$jih_version = 1;
+function InstallPlugin() {
+    global $jih_version;
+    if ( get_option( 'jih_schedular_version' ) != $jih_version ) {
+        $installer = new \controllers\InstallController();
+        $installer->InstallAction();
+        update_option( 'jih_schedular_version', $jih_version );
+    }
+
+}
+
+//TODO add translations: http://premium.wpmudev.org/blog/translating-wordpress-plugins/
 
 $JihHeadIncludes = new JihHeadIncludes();
 
@@ -53,6 +60,7 @@ $controller = new ScheduleController();
 //Register pages used by plugin
 $jihPageContainer = new \helpers\PageContainer();
 $jihPageContainer->add(new \helpers\Page("Calendars",array($controller,'WeekAction')));
+$jihPageContainer->add(new \helpers\Page("Calendar request",array($controller,'NewCalendarAction'),'Uw aanvraag is verstuurd naar de website administrator.'));
 //Register hooks needed for the pages
 register_activation_hook( __FILE__,array($jihPageContainer,'registerPages') );
 register_deactivation_hook( __FILE__,array($jihPageContainer,'unregisterPages') );
@@ -85,7 +93,9 @@ if(!is_admin()){
 } else {
         //If in admin zone
     //ADMIN STUFF
+
     $adminMenu = new \helpers\AdminMenu('Calendars');
+    $adminMenu->AddSubMenu(new \helpers\AdminSubMenu('Settings'));
     $adminMenu->AddSubMenu(new \helpers\AdminSubMenu('Events'));
     $adminMenu->AddSubMenu(new \helpers\AdminSubMenu('Add Calendar',null,'CalendarForm'));
     $adminMenu->AddSubMenu(new \helpers\AdminSubMenu('Add Event',null,'EventForm'));

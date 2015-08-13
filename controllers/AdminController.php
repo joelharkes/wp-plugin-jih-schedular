@@ -9,6 +9,7 @@
 namespace controllers;
 
 use helpers\Input;
+use helpers\Setting;
 use Twig\WpTwigViewHelper;
 
 class AdminController extends Controller{
@@ -23,6 +24,13 @@ class AdminController extends Controller{
         $data['calendars'] = $cal->Execute();
         $data['search'] = $search;
         return WpTwigViewHelper::getInstance()->Render('admin-schedule.twig',$data);
+    }
+
+    public function SettingsAction(){
+        $data=array();
+        $data['calendars'] = $this->dbContext->Calendars()->Execute();
+        $data['calendar'] = Setting::get('defaultCalendar');
+        return WpTwigViewHelper::getInstance()->Render('admin-settings.twig',$data);
     }
 
     public function CalendarFormAction(){
@@ -46,7 +54,7 @@ class AdminController extends Controller{
 
     public function EventFormAction(){
         $data=array();
-        $data['calendars'] = $this->dbContext->Calendars()->Execute()->First();
+        $data['calendars'] = $this->dbContext->Calendars()->Execute();
         if($id = Input::Param('id'))
             $data['event'] = $this->dbContext->Events()->Where('id',$id)->Execute();
         return WpTwigViewHelper::getInstance()->Render('admin-event-form.twig',$data);

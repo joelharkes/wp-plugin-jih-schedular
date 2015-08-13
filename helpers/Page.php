@@ -24,15 +24,20 @@ class Page {
      * @var callable
      */
     private $renderAction;
-
+    /**
+     * @var string
+     */
+    private $content;
 
     /**
      * @param string $title
      * @param callable $renderAction
+     * @param string $content
      */
-    public function __construct($title,$renderAction = null){
+    public function __construct($title,$renderAction = null,$content = "This is a page generated for jih-scheduel plugin"){
         $this->title = $title;
         $this->renderAction = $renderAction;
+        $this->content = $content;
 
         $this->id = get_option($this->getOptionName());
 
@@ -49,7 +54,8 @@ class Page {
         $id = wp_insert_post(array(
             'post_title'=>$this->title,
             'post_status'=>'publish',
-            'post_type'=>'page'
+            'post_type'=>'page',
+            'post_content'=>$this->content
         ));
         $this->id = $id;
         \update_option($this->getOptionName(),$id);
@@ -62,6 +68,7 @@ class Page {
      */
     public function unregister(){
         if($this->id){
+            remove_action('before_delete_post',array($this,'protectRegisteredPage'));
             wp_delete_post($this->id,true);
             $this->id = null;
         }
@@ -73,17 +80,18 @@ class Page {
      * @param int $postId
      */
     public function protectRegisteredPage($postId){
-        if($postId == $this->id)
+        if($postId != 0 && $postId == $this->id)
             exit('You can not delete this page, this page is created for jih schedule plugin.');
     }
 
     public function executeRenderIfMyPage($originalContent){
         global $post;
         if($post->ID == $this->id && $this->renderAction != null){
-            return call_user_func($this->renderAction,$originalContent);
-        } else {
-            return $originalContent;
+            $newContent = call_user_func($this->renderAction,$originalContent);
+            if($newContent !== null)
+                return $newContent;
         }
+        return $originalContent;
     }
 
     public function getOptionName(){

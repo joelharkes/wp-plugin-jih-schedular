@@ -29,7 +29,7 @@ class EventViewModel extends AWPModel {
 	{
 		$viewName = static::GetPrefixedTable();
 		$eventTable = Event::GetPrefixedTable();
-		return "CREATE VIEW $viewName AS SELECT id,calendarId,datetime,name,email,description,userId FROM $eventTable";
+		return "CREATE OR REPLACE VIEW $viewName AS SELECT id,calendarId,datetime,name,email,description,userId FROM $eventTable";
 	}
 
 
