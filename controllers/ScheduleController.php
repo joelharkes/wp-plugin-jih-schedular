@@ -23,7 +23,7 @@ class ScheduleController extends Controller {
         $data['calendars'] = $this->dbContext->Calendars()->Execute();
 
         if(Input::Param('calendarId')){
-            $data['calendar'] = $this->dbContext->Calendars()->FindById(Input::Cookie('calendarId'));
+            $data['calendar'] = $this->dbContext->Calendars()->FindById(Input::Cookie('calendarId',Setting::get('defaultCalendar')));
             $data['calendarId'] = Input::Param('calendarId');
         } else {
             $data['calendar'] = $this->dbContext->Calendars()->First();
