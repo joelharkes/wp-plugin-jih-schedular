@@ -23,8 +23,6 @@ class InstallController extends  Controller {
         $db->Execute(\models\Calendar::CreateTableQuery());
         $db->Execute(\models\Event::CreateTableQuery());
         $db->Execute(\models\EventViewModel::CreateTableQuery());
-
-        Ajax::Success('success','CreateTable commands successful');
     }
 
     public static function DropEverythingAction(){

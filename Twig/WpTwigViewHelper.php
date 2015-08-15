@@ -8,6 +8,7 @@
 
 namespace Twig;
 
+use helpers\Setting;
 use helpers\ViewHelper;
 use models\User;
 use Singleton;
@@ -49,12 +50,17 @@ class WpTwigViewHelper extends Singleton {
 
 
         $this->twig->addFunction(new Twig_SimpleFunction('tr', array($this, 'tr')));
+        $this->twig->addFunction(new Twig_SimpleFunction('setting', array($this, 'setting')));
         $this->templateData['user'] = User::Current();
 //        wp_get_current_commenter();
     }
 
     public function tr($defaultText){
         return __($defaultText,'jih-schedular');
+    }
+
+    public function setting($key){
+        return Setting::get($key);
     }
 
     /**

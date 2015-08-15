@@ -37,6 +37,10 @@ function loadTranslations() {
     load_plugin_textdomain( 'jih-schedular', false, dirname( plugin_basename(__FILE__) ) . '/lang/' );
 }
 
+function tr($name){
+    return __($name,'jih-schedular');
+}
+
 //INSTALL SCRIPT
 //TODO REPLACE: SAFE CREATE TABLE AND
 add_action( 'plugins_loaded', 'InstallPlugin' );
@@ -59,8 +63,8 @@ $JihHeadIncludes = new JihHeadIncludes();
 $controller = new ScheduleController();
 //Register pages used by plugin
 $jihPageContainer = new \helpers\PageContainer();
-$jihPageContainer->add(new \helpers\Page("Calendars",array($controller,'WeekAction')));
-$jihPageContainer->add(new \helpers\Page("Calendar request",array($controller,'NewCalendarAction'),'Uw aanvraag is verstuurd naar de website administrator.'));
+$jihPageContainer->add(new \helpers\Page(tr("Calendars"),array($controller,'WeekAction')));
+$jihPageContainer->add(new \helpers\Page(tr("Calendar request"),array($controller,'NewCalendarAction'),'Uw aanvraag is verstuurd naar de website administrator.'));
 //Register hooks needed for the pages
 register_activation_hook( __FILE__,array($jihPageContainer,'registerPages') );
 register_deactivation_hook( __FILE__,array($jihPageContainer,'unregisterPages') );

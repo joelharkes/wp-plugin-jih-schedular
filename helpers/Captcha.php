@@ -20,7 +20,8 @@ class Captcha {
 //		if(self::IsValidated())
 //			return true;
 		$captcha = $data['g-recaptcha-response'];
-		$secret = '6Lcw1vsSAAAAAIxl-CW-cIUhxPwO96EZspyzIUJh';
+
+		$secret = Setting::get('reCaptchaServer');
 		$remoteIp = $_SERVER['REMOTE_ADDR'];
 		$url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$captcha&remoteip=$remoteIp";
 		$response = file_get_contents($url);
