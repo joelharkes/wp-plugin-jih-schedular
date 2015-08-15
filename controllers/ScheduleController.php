@@ -22,12 +22,14 @@ class ScheduleController extends Controller {
         $data['action'] = 'Week';
         $data['calendars'] = $this->dbContext->Calendars()->Execute();
 
-        if(Input::Param('calendarId')){
-            $data['calendar'] = $this->dbContext->Calendars()->FindById(Input::Cookie('calendarId',Setting::get('defaultCalendar')));
-            $data['calendarId'] = Input::Param('calendarId');
+        $calId = Input::Param('calendarId',Setting::get('defaultCalendar'));
+
+        if($calId){
+            $data['calendar'] = $this->dbContext->Calendars()->FindById($calId);
+            $data['calendarId'] = $calId;
         } else {
             $data['calendar'] = $this->dbContext->Calendars()->First();
-            $data['calendarId'] = Setting::get('defaultCalendar');
+            $data['calendarId'] = $data['calendar']->id;
         }
 
         return  WpTwigViewHelper::getInstance()->Render('day-view.twig',$data);
