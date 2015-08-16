@@ -8,7 +8,7 @@
 namespace helpers;
 
 class Input {
-
+//Todo: Make object, remove static. Add flag static vars for input type. Rename to request o or requestdata
     public static function Post($item=null,$default=null){
         if($item==null)
             return  !empty($_POST) ? $_POST : $default;
