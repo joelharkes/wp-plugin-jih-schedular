@@ -48,7 +48,9 @@ For the right price i'll update the plugin for you. Contact me on jlharkes@gmail
 == Screenshots ==
 
 1. Screenshot of the main windows plugin, this is how your schedule looks like
-2. This is the second screen shot
+2. The plugin works in all types of themes, but the themes should use bootstrap.
+3. The plugin uses intuitive popups to show forms for people to fill.
+4. The add event pop-up when not logged in, can only add event with recaptcha (anti bots, spam!)
 
 == Changelog ==
 
