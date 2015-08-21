@@ -21,54 +21,109 @@ define('JIH_URL',plugins_url('', __FILE__ ));
 define('JIH_CONTROLLER_ACTION_PARAM','Action');
 
 include(ABSPATH . "wp-includes/pluggable.php");
+include("helpers/setting.php");
 
-//AUTOLOADING CLASSES
-spl_autoload_register( 'AutoLoadJihSchedularFiles' );
-function AutoLoadJihSchedularFiles( $class ) {
-    $sanitizedClass =  str_replace('\\',DIRECTORY_SEPARATOR,$class);
-    $filePath = JIH_PATH .DIRECTORY_SEPARATOR. $sanitizedClass . '.php';
-    if ( file_exists ( $filePath ) ){
-        include( $filePath);
+$program = new Program();
+$program->start();
+
+class Program {
+
+    public $prefix;
+    public $path;
+    public $url;
+    public $version = 1;
+
+    public $settings;
+
+    public function  __construct(){
+        $this->prefix = 'jih-schedular';
+        $this->path = substr(plugin_dir_path( __FILE__ ),0,-1);
+        $this->url = plugins_url('', __FILE__ );
+
+        $this->settings = new \helpers\Settings($this->prefix);
+    }
+
+    public function start(){
+        $this->registerAutoload();
+        $this->registerInstall();
+        $this->registerTranslations();
+
+        $this->registerPages();
+    }
+
+
+    public function registerPages(){
+        //Frontend:
+
+        $controller = new ScheduleController();
+        //Register pages used by plugin
+        $jihPageContainer = new \helpers\PageContainer();
+        $jihPageContainer->add(new \helpers\Page(tr("Calendars"),array($controller,'WeekAction')));
+        $jihPageContainer->add(new \helpers\Page(tr("Calendar request"),array($controller,'NewCalendarAction'),'Uw aanvraag is verstuurd naar de website administrator.'));
+        //Register hooks needed for the pages.
+        register_activation_hook( __FILE__,array($jihPageContainer,'registerPages') );
+        register_deactivation_hook( __FILE__,array($jihPageContainer,'unregisterPages') );
+    }
+
+    public function registerTranslations(){
+        add_action('plugins_loaded', array($this,'loadTranslations'));
+    }
+
+    public function loadTranslations(){
+        load_plugin_textdomain( $this->prefix, false, dirname( plugin_basename(__FILE__) ) . '/lang/' );
+    }
+    
+    public function registerInstall()
+    {
+        add_action( 'plugins_loaded', array($this,'install') );
+    }
+
+    public function install()
+    {
+        if ( $this->settings->get('plugin-version') != $this->version ) {
+            $installer = new \controllers\InstallController();
+            $installer->InstallAction();
+            $this->settings->set('plugin-version', $this->version );
+        }
+    }
+
+
+    public function registerAutoload(){
+        spl_autoload_register( array($this,'autoload') );
+    }
+
+    public function autoload($class){
+        $sanitizedClass =  str_replace('\\',DIRECTORY_SEPARATOR,$class);
+        $filePath = $this->path .DIRECTORY_SEPARATOR. $sanitizedClass . '.php';
+        if ( file_exists ( $filePath ) ){
+            include( $filePath);
+        }
+    }
+
+    /**
+     * Translate function which uses the wp __() translate function. gets the translation out of the file named like the prefix
+     * @param $text
+     * @return string
+     */
+    public function tr($text){
+        return __($text,$this->prefix);
     }
 }
 
-add_action('plugins_loaded', 'loadTranslations');
-function loadTranslations() {
-    load_plugin_textdomain( 'jih-schedular', false, dirname( plugin_basename(__FILE__) ) . '/lang/' );
-}
+
+
 
 function tr($name){
     return __($name,'jih-schedular');
 }
 
 //INSTALL SCRIPT
-//TODO REPLACE: SAFE CREATE TABLE AND
-add_action( 'plugins_loaded', 'InstallPlugin' );
+//TODO REPLACE: SAFE Install and update
 
-$jih_version = 1;
-function InstallPlugin() {
-    global $jih_version;
-    if ( get_option( 'jih_schedular_version' ) != $jih_version ) {
-        $installer = new \controllers\InstallController();
-        $installer->InstallAction();
-        update_option( 'jih_schedular_version', $jih_version );
-    }
-
-}
 
 //TODO add translations: http://premium.wpmudev.org/blog/translating-wordpress-plugins/
 
 $JihHeadIncludes = new JihHeadIncludes();
-
-$controller = new ScheduleController();
-//Register pages used by plugin
-$jihPageContainer = new \helpers\PageContainer();
-$jihPageContainer->add(new \helpers\Page(tr("Calendars"),array($controller,'WeekAction')));
-$jihPageContainer->add(new \helpers\Page(tr("Calendar request"),array($controller,'NewCalendarAction'),'Uw aanvraag is verstuurd naar de website administrator.'));
-//Register hooks needed for the pages
-register_activation_hook( __FILE__,array($jihPageContainer,'registerPages') );
-register_deactivation_hook( __FILE__,array($jihPageContainer,'unregisterPages') );
-
 
 //Register API CALLS
 if(Input::Param('Install',false)){
