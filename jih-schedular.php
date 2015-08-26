@@ -1,12 +1,12 @@
 <?php
 /*
 Plugin Name: Jih Schedular
-Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
-Description: A brief description of the Plugin.
-Version: 1.1
-Author: Joel
+Plugin URI: https://wordpress.org/plugins/jih-schedular/
+Description: A plugin that adds a page where you can show timetables, and people can schedule themselves in these tables.
+Version: 1.2
+Author: joelharkes
 Author URI: http://URI_Of_The_Plugin_Author
-License: A "Slug" license name e.g. GPL2
+License: GPL2
 */
 
 
@@ -31,24 +31,31 @@ class Program {
     public $prefix;
     public $path;
     public $url;
-    public $version = 1;
+    public $version;
 
     public $settings;
 
     public function  __construct(){
+        $this->registerAutoload();
+
         $this->prefix = 'jih-schedular';
+        $this->version = 1;
         $this->path = substr(plugin_dir_path( __FILE__ ),0,-1);
         $this->url = plugins_url('', __FILE__ );
 
-        $this->settings = new \helpers\Settings($this->prefix);
+        $this->settings = new \helpers\Settings($this->prefix.'-');
     }
 
     public function start(){
-        $this->registerAutoload();
         $this->registerInstall();
         $this->registerTranslations();
 
+        $this->handleApiCalls();
+
         $this->registerPages();
+        $this->registerAdminPages();
+
+        $JihHeadIncludes = new JihHeadIncludes();
     }
 
 
@@ -58,8 +65,8 @@ class Program {
         $controller = new ScheduleController();
         //Register pages used by plugin
         $jihPageContainer = new \helpers\PageContainer();
-        $jihPageContainer->add(new \helpers\Page(tr("Calendars"),array($controller,'WeekAction')));
-        $jihPageContainer->add(new \helpers\Page(tr("Calendar request"),array($controller,'NewCalendarAction'),'Uw aanvraag is verstuurd naar de website administrator.'));
+        $jihPageContainer->add(new \helpers\Page($this->tr("Calendars"),array($controller,'WeekAction')));
+        $jihPageContainer->add(new \helpers\Page($this->tr("Calendar request"),array($controller,'NewCalendarAction'),'Uw aanvraag is verstuurd naar de website administrator.'));
         //Register hooks needed for the pages.
         register_activation_hook( __FILE__,array($jihPageContainer,'registerPages') );
         register_deactivation_hook( __FILE__,array($jihPageContainer,'unregisterPages') );
@@ -100,6 +107,27 @@ class Program {
         }
     }
 
+
+    public function handleApiCalls(){
+        if(Input::Post('dataType')=='json'){
+            $controller = new AjaxController();// Save and Edit function Get Array as input
+            if(str::startsWith(Input::Param('action'),'Save') || str::startsWith(Input::Param('action'),'Edit')){
+                $controller->{Input::Param('action')}(Input::Param('input'));
+            } else { //Rest gets called as User func array (array is split up as input parameters)
+                call_user_func_array(array($controller,Input::Param('action')),Input::Param('input'));
+            }
+        }
+    }
+
+    public  function registerAdminPages(){
+        // TODO: now the menukey is used in the callback (AdminController->route([menuKey]Action) => Fill callbackAction or directly link to view
+        $adminMenu = new \helpers\AdminMenu($this->tr('Calendars'),null,'dashicons-calendar','calendars');
+        $adminMenu->AddSubMenu(new \helpers\AdminSubMenu('Settings'));
+        $adminMenu->AddSubMenu(new \helpers\AdminSubMenu($this->tr('Events'),null,'Events'));
+        $adminMenu->AddSubMenu(new \helpers\AdminSubMenu($this->tr('Add Calendar'),null,'CalendarForm'));
+        $adminMenu->AddSubMenu(new \helpers\AdminSubMenu($this->tr('Add Event'),null,'EventForm'));
+    }
+
     /**
      * Translate function which uses the wp __() translate function. gets the translation out of the file named like the prefix
      * @param $text
@@ -111,87 +139,19 @@ class Program {
 }
 
 
-
-
-function tr($name){
-    return __($name,'jih-schedular');
-}
-
 //INSTALL SCRIPT
 //TODO REPLACE: SAFE Install and update
-
-
 //TODO add translations: http://premium.wpmudev.org/blog/translating-wordpress-plugins/
 
-$JihHeadIncludes = new JihHeadIncludes();
 
-//Register API CALLS
-if(Input::Param('Install',false)){
-    $controller = new \controllers\InstallController();
-    $controller->route(Input::Param('Install'));
-}
-
-
-//CONTROLLER LOGIC
-if(Input::Post('dataType')=='json'){
-    $controller = new AjaxController();// Save and Edit function Get Array as input
-    if(startsWith(Input::Param('action'),'Save') || startsWith(Input::Param('action'),'Edit')){
-        $controller->{Input::Param('action')}(Input::Param('input'));
-    } else { //Rest gets called as User func array (array is split up as input parameters)
-        call_user_func_array(array($controller,Input::Param('action')),Input::Param('input'));
-    }
-}
-if(!is_admin()){
-
-    if(Input::Param(JIH_CONTROLLER_ACTION_PARAM)){
-        $controller = new ScheduleController();
-        $controller->route(Input::Param(JIH_CONTROLLER_ACTION_PARAM));
-    }
-
-
-} else {
-        //If in admin zone
-    //ADMIN STUFF
-
-    $adminMenu = new \helpers\AdminMenu('Calendars');
-    $adminMenu->AddSubMenu(new \helpers\AdminSubMenu('Settings'));
-    $adminMenu->AddSubMenu(new \helpers\AdminSubMenu('Events'));
-    $adminMenu->AddSubMenu(new \helpers\AdminSubMenu('Add Calendar',null,'CalendarForm'));
-    $adminMenu->AddSubMenu(new \helpers\AdminSubMenu('Add Event',null,'EventForm'));
-}
 
 function isAdministrator(){
     return current_user_can( 'manage_options' );
 }
 
-function startsWith($haystack, $needle)
-{
-    return $needle === "" || strpos($haystack, $needle) === 0;
+class str {
+    static function startsWith($haystack, $needle)
+    {
+        return $needle === "" || strpos($haystack, $needle) === 0;
+    }
 }
-
-
-//EXAMPLES!!
-
-
-//$twigHelper = Twig\WpTwigViewHelper::getInstance();
-//$twigHelper->loadTemplate();
-//$twigHelper->addTemplateData('yolo','it aint working!');
-//
-//$twig = $twigHelper->twig;
-
-//add_filter( 'body_class',function($data){ return array('test');});
-
-//function switchTemplate(){
-//    return JIH_PATH.'/views/default-template.php';
-//}
-//
-//if(isset($_GET['jih'])){
-//    add_filter( 'template_include', 'switchTemplate' );
-//}
-
-//add_action( 'wp_ajax_my_action', 'myAction' );
-//
-//function myAction(){
-//    echo json_encode('yoloooh');
-//    die();
-//}
