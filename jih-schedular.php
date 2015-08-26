@@ -6,6 +6,7 @@ Description: A plugin that adds a page where you can show timetables, and people
 Version: 1.2.1
 Author: joelharkes
 Author URI: http://URI_Of_The_Plugin_Author
+Text Domain: jih-schedular
 License: GPL2
 */
 
