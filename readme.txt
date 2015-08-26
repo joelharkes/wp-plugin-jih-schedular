@@ -54,11 +54,15 @@ For the right price i'll update the plugin for you. Contact me on jlharkes@gmail
 
 == Changelog ==
 
-= 1.0 =
-* Initial check-in of the plugin to wordpress
+
+= 1.2.1 =
+* Hotfix for include file warning
+
+= 1.2 =
+* Set to active version
 
 = 0.1 =
-* Simple setup of the plugin
+* Initial check-in of the plugin to wordpress
 
 == Upgrade Notice ==
 
