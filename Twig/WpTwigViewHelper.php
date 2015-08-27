@@ -9,7 +9,6 @@
 namespace Twig;
 
 use helpers\Setting;
-use helpers\ViewHelper;
 use models\User;
 use Singleton;
 use Twig_Autoloader;
@@ -51,8 +50,15 @@ class WpTwigViewHelper extends Singleton {
 
         $this->twig->addFunction(new Twig_SimpleFunction('tr', array($this, 'tr')));
         $this->twig->addFunction(new Twig_SimpleFunction('setting', array($this, 'setting')));
+        $this->twig->addFunction(new Twig_SimpleFunction('language', array($this, 'extractLanguageCode')));
+
         $this->templateData['user'] = User::Current();
 //        wp_get_current_commenter();
+    }
+
+    public function extractLanguageCode(){
+        $split =  explode("_",get_locale());
+        return $split[0];
     }
 
     public function tr($defaultText){

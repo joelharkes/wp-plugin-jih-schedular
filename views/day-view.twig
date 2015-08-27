@@ -4,6 +4,8 @@
 
     <script>
         $(document).ready(function () {
+            moment.locale('{{ language() }}');
+
             $infoModal = $('#jih-info-modal');
             $eventModal = $('#jih-plan-hour');
             $cal = $('#jih-calendar');
