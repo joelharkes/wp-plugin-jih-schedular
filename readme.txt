@@ -54,6 +54,11 @@ For the right price i'll update the plugin for you. Contact me on jlharkes@gmail
 
 == Changelog ==
 
+= 1.2.3 =
+* Add localisation for dates (moment.js is used for dates)
+
+= 1.2.2 =
+* Add localisation support. (Dutch added, english default)
 
 = 1.2.1 =
 * Hotfix for include file warning
