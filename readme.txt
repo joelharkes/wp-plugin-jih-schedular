@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com
 Tags: schedule, page
 Requires at least: 4.2.4
 Tested up to: 4.3
-Stable tag: 4.3
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,9 @@ For the right price i'll update the plugin for you. Contact me on jlharkes@gmail
 4. The add event pop-up when not logged in, can only add event with recaptcha (anti bots, spam!)
 
 == Changelog ==
+
+= 1.2.4 =
+* Fix readme. Update stable version to this corresponding plugin version.
 
 = 1.2.3 =
 * Add localisation for dates (moment.js is used for dates)
