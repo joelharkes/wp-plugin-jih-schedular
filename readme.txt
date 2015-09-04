@@ -54,6 +54,10 @@ For the right price i'll update the plugin for you. Contact me on jlharkes@gmail
 
 == Changelog ==
 
+
+= 1.2.5 =
+* Fix Calendar name was not showing on page load.
+
 = 1.2.4 =
 * Fix readme. Update stable version to this corresponding plugin version.
 

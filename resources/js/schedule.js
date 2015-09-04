@@ -55,6 +55,7 @@ $.widget( "jih.schedule", {
         });
 
         this.setOnDate(this.options.date);
+        this.changeCalendar(this.options.calendarId);
     },
 
     gotoNext : function(amount,period){
