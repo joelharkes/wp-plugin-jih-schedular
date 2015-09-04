@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com
 Tags: schedule, page
 Requires at least: 4.2.4
 Tested up to: 4.3
-Stable tag: 1.2.4
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,8 @@ For the right price i'll update the plugin for you. Contact me on jlharkes@gmail
 
 == Changelog ==
 
+= 1.2.6 =
+* Update stable version
 
 = 1.2.5 =
 * Fix Calendar name was not showing on page load.
