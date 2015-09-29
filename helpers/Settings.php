@@ -20,7 +20,7 @@ class Settings {
     }
 
     public function get($name){
-        get_option($this->prefix . $name);
+        return get_option($this->prefix . $name);
     }
 
     public function set($name,$value){

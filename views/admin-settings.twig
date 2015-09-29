@@ -28,6 +28,11 @@
                 <th><label for="recaptcha-serverside">{{ tr('Recaptcha Serverside (secret key)') }}</label></th>
                 <td><input name="reCaptchaServer" id="recaptcha-serverside" placeholder="{{ tr('Recaptcha Serverside key') }}" value="{{ setting('reCaptchaServer') }}"/></td>
             </tr>
+            <tr class="form-field">
+                <th><label for="plugin-style">{{ tr('Plugin css') }}</label></th>
+                <td><textarea rows="20" name="style" id="plugin-style" placeholder="{{ tr('plugin css') }}">{{ setting('style') }}</textarea></td>
+            </tr>
+
             </tbody>
         </table>
     </form>
@@ -35,7 +40,7 @@
 
 <script>
 
-    jQuery('#schedular-settings-form input,select').change(function(){
+    jQuery('input,select,textarea','#schedular-settings-form').change(function(){
         //Automatically safe setting directly:
         api.SetSetting(jQuery(this).prop('name'),jQuery(this).val());
     });

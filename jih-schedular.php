@@ -42,7 +42,7 @@ class Program {
         $this->registerAutoload();
 
         $this->prefix = 'jih-schedular';
-        $this->version = 1;
+        $this->version = 1.24;
         $this->path = substr(plugin_dir_path( __FILE__ ),0,-1);
         $this->url = plugins_url('', __FILE__ );
 
@@ -90,11 +90,20 @@ class Program {
 
     public function install()
     {
-        if ( $this->settings->get('plugin-version') != $this->version ) {
+        $oldVer = $this->settings->get('plugin-version') ;
+        if ( $oldVer <= 1 ) {
             $installer = new \controllers\InstallController();
             $installer->InstallAction();
-            $this->settings->set('plugin-version', $this->version );
         }
+        if($oldVer <= 1.23 ){
+            $this->settings->set("style",
+                ".schedular-body {
+    margin-left:-50px;
+    margin-right:-50px;
+}");
+        }
+
+        $this->settings->set('plugin-version', $this->version );
     }
 
 

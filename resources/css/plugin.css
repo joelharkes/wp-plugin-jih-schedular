@@ -84,10 +84,10 @@ table.table tbody tr td.is-filled {
 }
 
 /*Make calendar use full with of blog post in sparkling theme*/
-.schedular-body {
-    margin-left:-50px;
-    margin-right:-50px;
-}
+/*.schedular-body {*/
+    /*margin-left:-50px;*/
+    /*margin-right:-50px;*/
+/*}*/
 
 /* THEME Mine ZINE */
 /*#searchform .searchform-wrapper #s {*/
