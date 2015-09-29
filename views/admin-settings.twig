@@ -29,6 +29,16 @@
                 <td><input name="reCaptchaServer" id="recaptcha-serverside" placeholder="{{ tr('Recaptcha Serverside key') }}" value="{{ setting('reCaptchaServer') }}"/></td>
             </tr>
             <tr class="form-field">
+                <th><label for="showCalendarSelection">{{ tr('Show Calendar Selection') }}</label></th>
+                <td><select name="showCalendar" id="showCalendarSelection">
+                        {% set version = setting('showCalendar') %}
+                        <option value="0" {% if version == 0 %}selected{% endif %}>Never</option>
+                        <option value="1" {% if version == 1 %}selected{% endif %}>When admin</option>
+                        <option value="2" {% if version == 2 %}selected{% endif %}>Always</option>
+                        </select>
+                </td>
+            </tr>
+            <tr class="form-field">
                 <th><label for="plugin-style">{{ tr('Plugin css') }}</label></th>
                 <td><textarea rows="20" name="style" id="plugin-style" placeholder="{{ tr('plugin css') }}">{{ setting('style') }}</textarea></td>
             </tr>

@@ -122,7 +122,7 @@
                 <h3 id="calendar-header-date" style="margin: 4px 0 8px 0;"></h3>
             </div>
             <div class="col-md-4">
-                {% if user %}
+                {% if setting('showCalendar') == 2 or (setting('showCalendar') == 1 and user) %}
                 <select name="calendar" class="form-control" id="jih-calendar-choice" onchange="$('#jih-calendar').schedule('changeCalendar',$(this).val())">
                     {% for calendar in calendars %}
                         <option value="{{ calendar.id }}" {{ calendar.id==calendarId ? 'selected' }}>{{ calendar.name }}</option>

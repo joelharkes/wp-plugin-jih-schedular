@@ -42,7 +42,7 @@ class Program {
         $this->registerAutoload();
 
         $this->prefix = 'jih-schedular';
-        $this->version = 1.27;
+        $this->version = 1.28;
         $this->path = substr(plugin_dir_path( __FILE__ ),0,-1);
         $this->url = plugins_url('', __FILE__ );
 
@@ -101,6 +101,9 @@ class Program {
     margin-left:-50px;
     margin-right:-50px;
 }");
+        }
+        if($oldVer <= 1.27 ){
+            $this->settings->set("showCalendar",1);
         }
 
         $this->settings->set('plugin-version', $this->version );

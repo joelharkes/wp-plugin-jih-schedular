@@ -20,7 +20,7 @@ class ScheduleController extends Controller {
         $data['date'] =  Input::Param('date');
         $data['actionName'] = JIH_CONTROLLER_ACTION_PARAM;
         $data['action'] = 'Week';
-        $data['calendars'] = $this->dbContext->Calendars()->Execute();
+        $data['calendars'] = $this->dbContext->Calendars()->OrderBy("name")->Execute();
 
         $calId = Input::Param('calendarId',Setting::get('defaultCalendar'));
 
