@@ -3,8 +3,8 @@ Contributors: joelharkes
 Donate link: https://www.paypal.com
 Tags: schedule, page
 Requires at least: 4.2.4
-Tested up to: 4.3
-Stable tag: 1.2.8
+Tested up to: 4.9
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,14 @@ For the right price i'll update the plugin for you. Contact me on jlharkes@gmail
 4. The add event pop-up when not logged in, can only add event with recaptcha (anti bots, spam!)
 
 == Changelog ==
+
+
+== 1.3.0 ==
+* Added option to only let logged in users book hours
+* Shows popup now notifying settings are saved (admin)
+* Fixed some texts to also be Dutch
+* Show more user friendly dates in popup
+* Logged in users can now overwrite there username and email in booked hour
 
 == 1.2.8 ==
 * Added setting for visibility calendar select box
