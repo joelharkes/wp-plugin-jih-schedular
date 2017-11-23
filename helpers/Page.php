@@ -34,7 +34,7 @@ class Page {
      * @param callable $renderAction
      * @param string $content
      */
-    public function __construct($title,$renderAction = null,$content = "This is a page generated for jih-scheduel plugin"){
+    public function __construct($title,$renderAction = null,$content = "This is a page generated for jih-schedlule plugin. This page will show the calendar where hours can be booked"){
         $this->title = $title;
         $this->renderAction = $renderAction;
         $this->content = $content;
