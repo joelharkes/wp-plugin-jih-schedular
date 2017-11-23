@@ -32,7 +32,11 @@ jQuery(document).ready(function(){
             });
 
         } else if(!$this.hasClass('inThePast')) {
-            $('#jih-date').val(getDateFromElement(this).format(_datetimeFormat));
+            var date = getDateFromElement(this);
+            debugger;
+            
+            $('#jih-date').val(date.format(_datetimeFormat));
+            $('#jih-date-show').val(date.format("dddd DD MMM HH:mm"));
             $('#redirect-url').val(document.URL);
             $($eventModal).modal('show');
         }

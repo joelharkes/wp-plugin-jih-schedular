@@ -113,9 +113,8 @@ table.table tbody tr td.is-filled {
 /*}*/
 
 /* THEME Sparkling fix */
-
-.modal-dialog {
-    z-index: 1050;
+#jih-plan-hour.modal,#jih-plan-hour>.modal-dialog {
+    z-index: 99999;
 }
 .modal-footer > button[type=submit] {
     display: inline-block;

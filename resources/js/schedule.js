@@ -159,18 +159,12 @@ $.widget( "jih.schedule", {
             }
         });
     },
-
-
-
     CurDate : function(){
         return this.options.date.clone();
     },
-
     getCalendarId : function(){
         return this.options.calendarId;
     },
-
-
     _destroy: function() {
         //what to do when plugin is removed?
     }

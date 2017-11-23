@@ -64,12 +64,19 @@ class AjaxController extends Controller {
         if($this->dbContext->Events()->Where('datetime',$data['datetime'])->Any()){
             Ajax::Error(5,"Already event on this datetime");
         }
-
-        if(User::IsLoggedIn()){
+        $loggedIn = User::IsLoggedIn();
+        if(!$loggedIn && Setting::get("allowBookHour") == "user"){
+            Ajax::Error(5,"Anonymous users are not allowed");
+        }
+        if($loggedIn){
             $user = User::Current();
             $event  = new Event( $data );
-            $event->setEmail($user->user_email);
-            $event->setName($user->user_login);
+            if(!$event->getEmail()){
+                $event->setEmail($user->user_email);
+            }
+            if(!$event->getName()){
+                $event->setName($user->user_login);
+            }
             $event->setUserId($user->ID);
             $result = $this->dbContext->Events()->Insert( $event );
             Ajax::Success($result);

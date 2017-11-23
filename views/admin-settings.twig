@@ -39,6 +39,16 @@
                 </td>
             </tr>
             <tr class="form-field">
+                <th><label for="allowBookHour">{{ tr('Allow to book hour') }}</label></th>
+                <td><select name="allowBookHour" id="allowBookHour">
+                        {% set version = setting('allowBookHour') %}
+                        <option value="anon" {% if version == 0 %}selected{% endif %}>Anonymous and Users</option>
+                        <option value="user" {% if version == 1 %}selected{% endif %}>Logged in Users only</option>
+                        {# <option value="admin" {% if version == 2 %}selected{% endif %}>Admin</option> #}
+                        </select>
+                </td>
+            </tr>
+            <tr class="form-field">
                 <th><label for="plugin-style">{{ tr('Plugin css') }}</label></th>
                 <td><textarea rows="20" name="style" id="plugin-style" placeholder="{{ tr('plugin css') }}">{{ setting('style') }}</textarea></td>
             </tr>
@@ -53,5 +63,8 @@
     jQuery('input,select,textarea','#schedular-settings-form').change(function(){
         //Automatically safe setting directly:
         api.SetSetting(jQuery(this).prop('name'),jQuery(this).val());
+        var $alert = jQuery('<div class="updated notice" style="top:46px;left:166px;position:fixed"><p>Settings have been updated.</p></div>');
+        $alert.prependTo("#wpbody-content");
+        setTimeout(function(){$alert.remove()},1500);
     });
 </script>

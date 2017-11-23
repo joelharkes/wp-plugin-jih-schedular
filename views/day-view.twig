@@ -37,6 +37,8 @@
 
 
                     } else if(!$this.hasClass('inThePast')) {
+                        $('#jih-date-show').val(data.date.format("dddd DD MMM HH:mm"));
+                        $('input[name=datetime]',$eventModal).val(data.date.format(_datetimeFormat));
                         $('input[name=datetime]',$eventModal).val(data.date.format(_datetimeFormat));
                         $('input[name=redirectUrl]',$eventModal).val(document.URL);
                         $eventModal.modal('show');
@@ -72,7 +74,7 @@
                     window.location.reload();
                 }
             });
-
+            
             var $deleteForm = $('#delete-event-form');
             $deleteForm.submit(function(e){
                 e.preventDefault();
@@ -98,7 +100,17 @@
                 $(this).next().toggle();
             });
 
+            $('.changes-end-period').change(function(){
+                var data = $eventForm.serializeObject();
+                var iteration = 1;
+                var datetime = moment(data.datetime);
+                while(data.repeatQuantity > iteration){
+                    datetime = datetime.add(1,data.repeatPeriod);
+                    iteration++;
+                }
+                $("#period-end").text("(t/m "+datetime.format("dddd DD MMM")+")");
 
+            });
         });
 
     </script>
@@ -172,36 +184,37 @@
                                     class="sr-only">Close</span></button>
                         <h4 class="modal-title">Boek een gebedsuur</h4>
                     </div>
+                    
                     <form id="schedular-event-form" class="form-horizontal" role="form" action="/" method="post">
+                    {% if setting('allowBookHour') != "user" or user %}
                         <div class="modal-body">
                             <div class="hide">
                                 <input id="redirect-url" type="text" class="form-control" name="redirectUrl" value="">
                             </div>
                             <div class="form-group">
-                                <label for="jih-date" class="col-sm-2 control-label">Datum-tijd</label>
-
+                                <label for="jih-date-show" class="col-sm-2 control-label">Datum-tijd</label>
+                                <input id="jih-date" type="hidden" class="form-control" name="datetime" readonly>
                                 <div class="col-sm-10">
-                                    <input id="jih-date" type="datetime" class="form-control" name="datetime" placeholder="Date" readonly>
+                                    <input id="jih-date-show" class="form-control" placeholder="Date" readonly>
                                 </div>
                             </div>
-                            {% if not user %}
+                            
+                            
                             <div class="form-group">
                                 <label for="jih-name" class="col-sm-2 control-label">Naam</label>
 
                                 <div class="col-sm-10">
-                                    <input id="jih-name" type="text" class="form-control" name="name"
-                                           placeholder="Name">
+                                    <input id="jih-name" type="text" class="form-control" name="name" placeholder="Name" value="{{ user.user_login}}">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="jih-email" class="col-sm-2 control-label">Email*</label>
 
                                 <div class="col-sm-10">
-                                    <input type="email" class="form-control" id="jih-email" name="email"
+                                    <input type="email" class="form-control" id="jih-email" name="email" value="{{ user.user_email}}"
                                            placeholder="Email" required>
                                 </div>
                             </div>
-                            {% endif %}
                             <div class="form-group">
                                 <label for="jih-email" class="col-sm-2 control-label">Beschrijving</label>
 
@@ -220,15 +233,16 @@
                                         <input type="checkbox" name="repeat" class="repeatEventCheckbox">
                                         <span style="display: none;">
                                              Elke
-                                        <select name="repeatPeriod">
+                                        <select name="repeatPeriod" class="changes-end-period">
                                             <option value="day">dag</option>
                                             <option value="week">week</option>
                                             <option value="month">maand</option>
                                         </select>
                                             , voor
-                                        <input type="number" name="repeatQuantity" min="1" max="12" >
+                                        <input type="number" name="repeatQuantity" min="1" max="12" class="changes-end-period">
                                          keer
                                         </span>
+                                        <span id="period-end"></span>
                                     {% endif %}
                                 </div>
                             </div>
@@ -252,6 +266,16 @@
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Save</button>
                         </div>
+                        {% else %}
+                        <div class="modal-body">
+                            Login om een uur te boeken.<br/>
+                            <br/>
+                            Je kunt alleen uren boeken als je ingelogd bent.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                        {% endif %}
                     </form>
                 </div>
                 <!-- /.modal-content -->
