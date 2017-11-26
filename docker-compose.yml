@@ -24,7 +24,7 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
     volumes:
-      - ./:/var/www/html/wp-content/plugins/jih-schedular/
+      - ./src/:/var/www/html/wp-content/plugins/jih-schedular/
 volumes:
     db_data:
     #db_plugins:
