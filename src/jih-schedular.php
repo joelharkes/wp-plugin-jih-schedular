@@ -4,6 +4,8 @@ Plugin Name: Jih Schedular
 Plugin URI: https://wordpress.org/plugins/jih-schedular/
 Description: A plugin that adds a page where you can show timetables, and people can schedule themselves in these tables.
 Version: 1.3.0
+Requires PHP: 8.0
+Requires at least: 4.2.4
 Author: joelharkes
 Author URI: http://URI_Of_The_Plugin_Author
 Text Domain: jih-schedular
@@ -82,7 +84,7 @@ class Program {
     public function loadTranslations(){
         load_plugin_textdomain( $this->prefix, false, dirname( plugin_basename(__FILE__) ) . '/lang/' );
     }
-    
+
     public function registerInstall()
     {
         add_action( 'plugins_loaded', array($this,'install') );
