@@ -21,7 +21,7 @@ class Calendar extends AWPModel {
     protected $description;
 
 
-    public static function CreateTableQuery(){
+    public static function CreateTableQuery($sql=null){
         return parent::CreateTableQuery("
             id int NOT NULL AUTO_INCREMENT,
             name VARCHAR(100) DEFAULT 'No Name' NOT NULL,

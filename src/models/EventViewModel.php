@@ -25,7 +25,7 @@ class EventViewModel extends AWPModel {
 	protected $description;
 	protected $userId;
 
-	public static function CreateTableQuery()
+	public static function CreateTableQuery($sql=null)
 	{
 		$viewName = static::GetPrefixedTable();
 		$eventTable = Event::GetPrefixedTable();

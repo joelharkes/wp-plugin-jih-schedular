@@ -27,7 +27,7 @@ class Event extends AWPModel {
     protected $userId;
 
 
-    public static function CreateTableQuery()
+    public static function CreateTableQuery($sql=null)
     {
         return parent::CreateTableQuery("
             id int NOT NULL AUTO_INCREMENT,
@@ -163,4 +163,4 @@ class Event extends AWPModel {
     }
 
 
-} 
+}
