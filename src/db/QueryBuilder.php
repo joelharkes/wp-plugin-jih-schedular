@@ -46,6 +46,7 @@ class QueryBuilder{
             $column .= $item===null ? ' is' : ' =';
         }
         if($item == null) $item = 'null';
+        if($item instanceof \DateTimeInterface) $item = $item->format('c');
         $this->where[] = $column;
         $this->whereData[] = $item;
         return $this;
@@ -133,7 +134,7 @@ class QueryBuilder{
     }
 
     public function ToList(){
-        return $this->Execute();
+        return iterator_to_array($this->Execute());
     }
 
     public function First(){
