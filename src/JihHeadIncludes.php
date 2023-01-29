@@ -25,7 +25,7 @@ class JihHeadIncludes {
         $this->AddJs('lib/datetime-picker/jquery.datetimepicker','jquery-datetime-picker',array(),false,true);
 
         $this->AddJs('lib/bootstrap-3.2.0/js/bootstrap','bootstrap',array('jquery'),true,true);
-        $this->AddJs('lib/moment-2.8.3/moment-with-locales','moment',array('jquery'),true,false);
+        $this->AddJs('lib/moment-2.8.3/moment-with-locales','moment.js',array('jquery'),true,false);
         $this->AddJs('lib/jquery.cookie','cookie',array('jquery'),true,false);
         $this->AddJsUrl('https://www.google.com/recaptcha/api.js','google-api',array('jquery'),true,false);
 
